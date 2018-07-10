@@ -20,6 +20,8 @@ class CivicrmLocation extends RelationshipPluginBase {
   public function __construct(array $configuration, $plugin_id, $plugin_definition, Civicrm $civicrm) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
+    $civicrm->initialize();
+    
     $this->default_location = \CRM_Core_BAO_LocationType::getDefault()->id;
     $this->locations = \CRM_Core_BAO_Address::buildOptions('location_type_id');
 
