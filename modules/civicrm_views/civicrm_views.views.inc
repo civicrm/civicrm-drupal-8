@@ -674,7 +674,7 @@ function _civicrm_views_get_custom_fields() {
       'table' => $dao->table_name,
       'name' => "custom_{$dao->id}",
       'real field' => $dao->column_name,
-      'type' => _getStandardTypeFromCustomDataType(array('data_type' => $dao->data_type)),
+      'type' => CRM_Utils_Array::value($dao->data_type, CRM_Core_BAO_CustomField::dataToType()),
       'join' => _civicrm_views_get_join_table($dao->extends),
       'pseudoconstant' => $dao->option_group_id,
     );
