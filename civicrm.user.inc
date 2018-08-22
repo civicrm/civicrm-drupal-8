@@ -1,6 +1,11 @@
 <?php
 
-use \Drupal\Core\Session\AccountInterface;
+/**
+ * @file
+ * User related hooks and helper functions.
+ */
+
+use Drupal\Core\Session\AccountInterface;
 
 /**
  * Implements hook_user_login().
@@ -32,7 +37,8 @@ function civicrm_user_insert(AccountInterface $account) {
   }
 
   // Process any profile form fields that may have been submitted.
-  // In particular, this will pick up form fields that were submitted on the user_registration page.
+  // In particular, this will pick up form fields that were submitted on the
+  // user_registration page.
   \CRM_Core_BAO_UFGroup::getEditHTML($contact_id, '', 2, TRUE, FALSE, NULL, FALSE, $civicrm->getCtype());
 }
 

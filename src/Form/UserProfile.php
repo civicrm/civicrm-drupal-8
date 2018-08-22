@@ -12,26 +12,62 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Drupal\Core\Cache\Cache;
 
-class UserProfile extends FormBase  {
-  protected $user;
-  protected $profile;
-  protected $contact_id;
-  protected $uf_group;
+/**
+ * Contains a form that allows for editing of the user profile.
+ */
+class UserProfile extends FormBase {
 
+  /**
+   * The user account if the user is already logged in.
+   *
+   * @var \Drupal\Core\Session\AccountInterface|null
+   */
+  protected $user;
+
+  /**
+   *
+   */
+  protected $profile;
+
+  /**
+   *
+   */
+  protected $contactId;
+
+  /**
+   *
+   */
+  protected $ufGroup;
+
+  /**
+   * Constructs class.
+   *
+   * @param \Drupal\civicrm\Civicrm $civicrm
+   *   The CiviCRM service.
+   */
   public function __construct(Civicrm $civicrm) {
     $civicrm->initialize();
   }
 
-  static function create(ContainerInterface $container) {
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
     return new static(
       $container->get('civicrm')
     );
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function getFormId() {
     return 'civicrm_user_profile';
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function buildForm(array $form, FormStateInterface $form_state, AccountInterface $user = NULL, $profile = NULL) {
     // Make the controller state available to form overrides.
     $form_state->set('controller', $this);
@@ -43,34 +79,37 @@ class UserProfile extends FormBase  {
     if (empty($uf_groups[$profile])) {
       throw new ResourceNotFoundException();
     }
-    $this->uf_group = $uf_groups[$profile];
+    $this->ufGroup = $uf_groups[$profile];
 
     // Grab the form html.
-    $this->contact_id = \CRM_Core_BAO_UFMatch::getContactId($user->id());
-    $html = \CRM_Core_BAO_UFGroup::getEditHTML($this->contact_id, $this->uf_group['title']);
+    $this->contactId = \CRM_Core_BAO_UFMatch::getContactId($user->id());
+    $html = \CRM_Core_BAO_UFGroup::getEditHTML($this->contactId, $this->ufGroup['title']);
 
     $form['#title'] = $this->user->getUsername();
-    $form['form'] = array(
+    $form['form'] = [
       '#type' => 'fieldset',
-      '#title' => $this->uf_group['title'],
-      'html' => array(
+      '#title' => $this->ufGroup['title'],
+      'html' => [
         '#markup' => Markup::create($html),
-      ),
-    );
-    $form['actions'] = array(
+      ],
+    ];
+    $form['actions'] = [
       '#type' => 'actions',
-      'submit' => array(
+      'submit' => [
         '#type' => 'submit',
         '#value' => t('Save'),
         '#button_type' => 'primary',
-      ),
-    );
+      ],
+    ];
 
     return $form;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function validateForm(array &$form, FormStateInterface $form_state) {
-    $errors = \CRM_Core_BAO_UFGroup::isValid($this->contact_id, $this->uf_group['title']);
+    $errors = \CRM_Core_BAO_UFGroup::isValid($this->contactId, $this->ufGroup['title']);
 
     if (is_array($errors)) {
       foreach ($errors as $name => $error) {
@@ -79,13 +118,19 @@ class UserProfile extends FormBase  {
     }
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     // Somehow, somewhere, CiviCRM is processing our form. I have no idea how.
     // Invalidate caches for user, so that latest profile information shows.
-    Cache::invalidateTags(array('user:' . $this->user->id()));
+    Cache::invalidateTags(['user:' . $this->user->id()]);
     drupal_set_message($this->t("Profile successfully updated."));
   }
 
+  /**
+   * Controls access for this form.
+   */
   public function access($profile) {
     $uf_groups = \CRM_Core_BAO_UFGroup::getModuleUFGroup('User Account', 0, FALSE, \CRM_Core_Permission::EDIT);
 
@@ -94,4 +139,5 @@ class UserProfile extends FormBase  {
     }
     return AccessResult::forbidden();
   }
+
 }

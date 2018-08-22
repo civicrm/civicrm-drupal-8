@@ -6,11 +6,14 @@ use Drupal\views\Plugin\views\field\Date;
 use Drupal\views\ResultRow;
 
 /**
+ * Maps drupal views' date handling to match CiviCRMs.
+ *
  * @ingroup views_field_handlers
  *
  * @ViewsField("civicrm_date")
  */
 class CivicrmDate extends Date {
+
   /**
    * {@inheritdoc}
    */
@@ -18,4 +21,5 @@ class CivicrmDate extends Date {
     $value = parent::getValue($values, $field);
     return strtotime($value);
   }
+
 }

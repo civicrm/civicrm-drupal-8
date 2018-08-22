@@ -2,7 +2,6 @@
 
 namespace Drupal\civicrmtheme\Theme;
 
-use Dompdf\Exception;
 use Drupal\civicrm\Civicrm;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
@@ -40,6 +39,10 @@ class CivicrmThemeNegotiator implements ThemeNegotiatorInterface {
    *
    * @param \Drupal\Core\Session\AccountInterface $user
    *   The current user service.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The config factory.
+   * @param \Drupal\civicrm\Civicrm $civicrm
+   *   The CiviCRM service.
    */
   public function __construct(AccountInterface $user, ConfigFactoryInterface $config_factory, Civicrm $civicrm) {
     $this->user = $user;
@@ -103,16 +106,19 @@ class CivicrmThemeNegotiator implements ThemeNegotiatorInterface {
     $admin_theme = $config->get('admin_theme');
     $public_theme = $config->get('public_theme');
 
-    // Check for public pages
-    // If public page and civicrm public theme is set, apply civicrm public theme
-    // If user does not have access to CiviCRM use the public page for the error message
+    // Check for public pages:
+    // * If public page and civicrm public theme is set, apply civicrm public
+    // theme.
+    // * If user does not have access to CiviCRM use the public page for the
+    // error message.
     if (!$this->user->hasPermission('access CiviCRM') || \CRM_Utils_Array::value('is_public', $item)) {
       if ($public_theme) {
         return $public_theme;
       }
     }
     elseif ($admin_theme) {
-      // If admin page and civicrm admin theme is set, apply civicrm admin theme
+      // If admin page and civicrm admin theme is set, apply civicrm admin
+      // theme.
       return $admin_theme;
     }
 
