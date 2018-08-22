@@ -766,12 +766,6 @@ function civicrm_drush_cache_clear(&$types) {
 function drush_civicrm_cacheclear() {
   _civicrm_init();
 
-  // Clear the classloader cache variable
-  // Should be done in CiviCRM core so that the system flush always deletes
-  // the variable, however, it needs to be done early enough before the
-  // ClassLoader initialization. FIXME.
-  // variable_del('civicrm_class_loader');
-
   // Flush all caches using the API
   $params = array('version' => 3);
   if (drush_get_option('triggers', FALSE)) {
