@@ -7,12 +7,22 @@ use Drupal\Component\Plugin\Derivative\DeriverBase;
 use Drupal\Core\Plugin\Discovery\ContainerDeriverInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+/**
+ * Derives CiviCRM local tasks to Drupal.
+ */
 class LocalTasks extends DeriverBase implements ContainerDeriverInterface {
+
+  /**
+   * Class constructor.
+   */
   public function __construct(Civicrm $civicrm) {
     $civicrm->initialize();
   }
 
-  static public function create(ContainerInterface $container, $base_plugin_id) {
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, $base_plugin_id) {
     return new static(
       $container->get('civicrm')
     );
@@ -28,10 +38,11 @@ class LocalTasks extends DeriverBase implements ContainerDeriverInterface {
       if ($uf_group['is_active']) {
         $this->derivatives["civicrm.{$key}"] = $base_plugin_definition;
         $this->derivatives["civicrm.{$key}"]['title'] = $uf_group['title'];
-        $this->derivatives["civicrm.{$key}"]['route_parameters'] = array('profile' => $key);
+        $this->derivatives["civicrm.{$key}"]['route_parameters'] = ['profile' => $key];
       }
     }
 
     return $this->derivatives;
   }
+
 }

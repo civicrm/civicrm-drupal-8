@@ -1,5 +1,5 @@
 route_callbacks:
-  - '\Drupal\civicrm\Routing\Routes::routes'
+  - '\Drupal\civicrm\Routing\Routes::listRoutes'
 
 # Let Drupal handle logouts directly. This entry clobbers the entry that will be
 # automatically generated in the route_callback above.

@@ -1,11 +1,21 @@
 <?php
 
 /**
- * Implements hook_install().
+ * @file
+ * Contains install-time code for the CiviCRM module.
+ */
+
+use Drupal\Core\StreamWrapper\PublicStream;
+use Civi\Install\Requirements;
+use Drupal\Core\Site\Settings;
+use Drupal\Core\Database\Database;
+
+/**
+ * Contains things that need to be installed when the module is installed.
  */
 function civicrm_install() {
-  // If civicrm.settings.php file is already present, we assume CiviCRM
-  // is already installed and abort.
+  // If civicrm.settings.php file is already present, we assume CiviCRM is
+  // already installed and abort.
   if (file_exists(\Drupal::service('kernel')->getSitePath() . '/civicrm.settings.php')) {
     drupal_set_message(t("CiviCRM appears to have already been installed. Skipping full installation."));
     return;
@@ -18,7 +28,9 @@ function civicrm_install() {
 
   // The civicrm install process uses globals all over the place. Ideally these
   // will go sometime soon and will be passed as explicit parameters.
+  // @codingStandardsIgnoreStart
   global $crmPath, $cmsPath, $installType;
+  // @codingStandardsIgnoreEnd
   $crmPath = $civicrm_base;
   $cmsPath = \Drupal::root();
   $installType = 'drupal';
@@ -26,74 +38,76 @@ function civicrm_install() {
   // Get database connection details.
   // We attempt to get a separate set of details for a civicrm database, but
   // otherwise default to using the same database as Drupal.
-  $drupal_db = \Drupal\Core\Database\Database::getConnection('default')->getConnectionOptions();
+  $drupal_db = Database::getConnection('default')->getConnectionOptions();
   $civicrm_db = _civicrm_get_db_config()['info'];
 
-  $config = array(
+  $config = [
     'cms' => 'Drupal8',
     'base_url' => $GLOBALS['base_url'],
-    'site_dir' => substr(\Drupal::service('kernel')->getSitePath(), 6), // Remove leading 'sites/'
-    'loadGenerated' => \Drupal\Core\Site\Settings::get('civicrm_load_generated', FALSE),
-    'mysql' => array(
+    // Remove leading 'sites/'.
+    'site_dir' => substr(\Drupal::service('kernel')->getSitePath(), 6),
+    'loadGenerated' => Settings::get('civicrm_load_generated', FALSE),
+    'mysql' => [
       'username' => $civicrm_db['username'],
       'password' => $civicrm_db['password'],
       'server' => "{$civicrm_db['host']}:{$civicrm_db['port']}",
       'database' => $civicrm_db['database'],
-    ),
-    'cmsdb' => array(
+    ],
+    'cmsdb' => [
       'username' => $drupal_db['username'],
       'password' => $drupal_db['password'],
       'server' => "{$drupal_db['host']}:{$drupal_db['port']}",
       'database' => $drupal_db['database'],
-    )
-  );
+    ],
+  ];
 
-  require_once("{$civicrm_base}/install/civicrm.php");
-  // @Todo: Enable CiviCRM's CRM_Core_TemporaryErrorScope::useException() and possibly catch exceptions.
-  // At the moment, civicrm doesn't allow exceptions to bubble up to Drupal. See CRM-15022.
+  require_once "{$civicrm_base}/install/civicrm.php";
+  // @TODO: Enable CiviCRM's CRM_Core_TemporaryErrorScope::useException() and
+  // possibly catch exceptions. At the moment, civicrm doesn't allow exceptions
+  // to bubble up to Drupal. See CRM-15022.
   civicrm_main($config);
 }
 
 /**
  * Implements hook_requirements().
- *
- * @param $phase
  */
 function civicrm_requirements($phase) {
-  $requirements = array();
+  $requirements = [];
 
   $civicrm_base = _civicrm_find_civicrm();
 
   if ($civicrm_base) {
-    require_once($civicrm_base . '/Civi/Install/Requirements.php');
-    $requirements['civicrm.location'] = array(
+    require_once $civicrm_base . '/Civi/Install/Requirements.php';
+    $requirements['civicrm.location'] = [
       'title' => 'CiviCRM location',
       'value' => $civicrm_base,
       'severity' => REQUIREMENT_OK,
       'description' => 'CiviCRM core directory',
-    );
+    ];
   }
   else {
-    $requirements['civicrm.location'] = array(
+    $requirements['civicrm.location'] = [
       'title' => 'CiviCRM location',
       'value' => NULL,
       'severity' => REQUIREMENT_ERROR,
       'description' => 'CiviCRM must be installed via composer.',
-    );
+    ];
     return $requirements;
   }
 
-  // Grab db connection info
+  // Grab db connection info.
   $db_config = _civicrm_get_db_config()['info'];
 
-  $install_requirements = new \Civi\Install\Requirements();
+  $install_requirements = new Requirements();
 
-  // Gather directories that need to be writable
+  // Gather directories that need to be writable.
   $file_paths = [];
   if (!file_exists(\Drupal::service('kernel')->getSitePath() . '/civicrm.settings.php')) {
-    $file_paths[] =  realpath(\Drupal::service('kernel')->getSitePath()); // eg. sites/default folder
+    // eg. sites/default folder.
+    $file_paths[] = realpath(\Drupal::service('kernel')->getSitePath());
   }
-  $file_paths[] = realpath(\Drupal\Core\StreamWrapper\PublicStream::basePath()); // eg. sites/default/files folder
+  // eg. sites/default/files folder.
+  $file_paths[] = realpath(PublicStream::basePath());
 
   // Attempt to make directories writable
   // We don't bother checking if these attempts are actually successful as
@@ -102,13 +116,13 @@ function civicrm_requirements($phase) {
     @chmod($path, 0755);
   }
 
-  foreach ($install_requirements->checkAll(array('db_config' => $db_config, 'file_paths' => $file_paths)) as $key => $result) {
-    $requirements["civicrm.$key"] = array(
+  foreach ($install_requirements->checkAll(['db_config' => $db_config, 'file_paths' => $file_paths]) as $key => $result) {
+    $requirements["civicrm.$key"] = [
       'title' => $result['title'],
       'value' => NULL,
       'severity' => $result['severity'],
       'description' => $result['details'],
-    );
+    ];
   }
 
   return $requirements;
@@ -117,13 +131,15 @@ function civicrm_requirements($phase) {
 /**
  * Returns the path to where CiviCRM is installed.
  *
- * @return string|void
+ * Installation via composer is recommended. We also allow /modules/civicrm,
+ * which seems to work fine.
  *
- * Installation via composer is recommended.
- * We also allow /modules/civicrm, which seems to work fine.
+ * @return string|null
+ *   A string to the location if we can find where CiviCRM is installed, NULL
+ *   if we can't.
  */
 function _civicrm_find_civicrm() {
-  $possible_paths = array();
+  $possible_paths = [];
 
   if ($path = drupal_get_path('module', 'civicrm')) {
     $possible_paths[] = $path;
@@ -142,34 +158,37 @@ function _civicrm_find_civicrm() {
 
 /**
  * Attempt to use a 'civicrm' labelled database connection if one exists.
- * Otherwise default to using the same connection used by drupal.
  *
+ * Otherwise default to using the same connection used by drupal.
  * Also handle the special case where this is running as a test.
+ *
+ * @return string[]
+ *   An array of what database-config to use.
  */
 function _civicrm_get_db_config() {
   if (drupal_valid_test_ua()) {
-    $config = \Drupal\Core\Database\Database::getConnectionInfo('civicrm_test');
+    $config = Database::getConnectionInfo('civicrm_test');
     if ($config) {
-      return array(
+      return [
         'key' => 'civicrm_test',
         'info' => $config['default'],
-      );
+      ];
     }
     else {
       throw new \RuntimeException("No civicrm_test database provided");
     }
   }
 
-  if ($config = \Drupal\Core\Database\Database::getConnectionInfo('civicrm')) {
-    return array(
+  if ($config = Database::getConnectionInfo('civicrm')) {
+    return [
       'key' => 'civicrm',
       'info' => $config['default'],
-    );
+    ];
   }
   else {
-    return array(
+    return [
       'key' => 'default',
-      'info' => \Drupal\Core\Database\Database::getConnectionInfo('default')['default'],
-    );
+      'info' => Database::getConnectionInfo('default')['default'],
+    ];
   }
 }

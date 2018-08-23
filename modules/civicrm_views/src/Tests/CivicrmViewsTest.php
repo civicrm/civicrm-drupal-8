@@ -11,100 +11,117 @@ use Drupal\views\Views;
  * @group CiviCRM
  */
 class CivicrmViewsTest extends CivicrmTestBase {
-  public static $modules = array('civicrm_views', 'civicrm_views_config');
-  // @Todo: Provide schema declaraction
+
+  /**
+   * {@inheritdoc}
+   */
+  protected static $modules = ['civicrm_views', 'civicrm_views_config'];
+
+  /**
+   * Disables the config schema checking.
+   *
+   * @var bool
+   *
+   * @Todo: Provide schema declaraction
+   */
   protected $strictConfigSchema = FALSE;
 
-  protected $contact_data = array(
-    array(
+  /**
+   * An array of contact data.
+   *
+   * @var array
+   */
+  protected $contactData = [
+    [
       'contact_type' => 'Individual',
       'first_name' => 'John',
       'last_name' => 'Smith',
-      'api.email.create' => array(
-        array(
+      'api.email.create' => [
+        [
           'email' => 'john.smith@example.com',
           'is_primary' => TRUE,
-        ),
-      ),
-      'api.address.create' => array(
-        array(
+        ],
+      ],
+      'api.address.create' => [
+        [
           'street_address' => '14 Main Street',
           'is_primary' => TRUE,
           'location_type_id' => 'Home',
-        ),
-      ),
-      'api.entity_tag.create' => array(
+        ],
+      ],
+      'api.entity_tag.create' => [
         'tag_id' => 'Volunteer',
-      ),
-      'api.relationship.create' => array(
-        'relationship_type_id' => 5, // Employee of
+      ],
+      'api.relationship.create' => [
+        // Employee of.
+        'relationship_type_id' => 5,
         'contact_id_a' => '$value.id',
-        'contact_id_b' => 1, // Default Organization
-      ),
-    ),
-    array(
+        // Default Organization.
+        'contact_id_b' => 1,
+      ],
+    ],
+    [
       'contact_type' => 'Individual',
       'first_name' => 'Jane',
       'last_name' => 'Smith',
-      'api.email.create' => array(
-        array(
+      'api.email.create' => [
+        [
           'email' => 'jane.smith@example.com',
           'is_primary' => TRUE,
-        ),
-        array(
+        ],
+        [
           'email' => 'jane.smithy@example.com',
-        ),
-      ),
-      'api.address.create' => array(
-        array(
+        ],
+      ],
+      'api.address.create' => [
+        [
           'street_address' => '3 Broadway Avenue',
           'is_primary' => TRUE,
           'location_type_id' => 'Work',
-        ),
-        array(
+        ],
+        [
           'street_address' => '5 Garden Grove',
           'location_type_id' => 'Home',
-        ),
-      ),
-      'api.entity_tag.create' => array(
+        ],
+      ],
+      'api.entity_tag.create' => [
         'tag_id' => 'Company',
-      ),
-      'api.relationship.create' => array(
-        'relationship_type_id' => 5, // Employee of
+      ],
+      'api.relationship.create' => [
+        // Employee of.
+        'relationship_type_id' => 5,
         'contact_id_a' => '$value.id',
-        'contact_id_b' => 1, // Default Organization
-      ),
-    ),
-  );
+        // Default Organization.
+        'contact_id_b' => 1,
+      ],
+    ],
+  ];
 
+  /**
+   * Creates data needed for the test.
+   */
   protected function createData() {
-    foreach ($this->contact_data as $contact) {
+    foreach ($this->contactData as $contact) {
       civicrm_api3('Contact', 'create', $contact);
     }
 
-    $result = civicrm_api3('Contact', 'get', array(
-      'options' => array('limit' => 100),
+    $result = civicrm_api3('Contact', 'get', [
+      'options' => ['limit' => 100],
       'api.email.get' => 1,
       'api.entity_tag.get' => 1,
       'api.address.get' => 1,
-    ));
+    ]);
 
     $this->assertTrue(empty($result['is_error']), "api.contact.get result OK.");
     $this->assertEqual(3, count($result['values']), "3 contacts have been created.");
     $this->verbose("<pre>" . var_export($result, TRUE) . "</pre>");
   }
 
+  /**
+   * Tests a CiviCRM view.
+   */
   public function testCivicrmViewsTest() {
     $this->createData();
-
-    $render = array(
-      'view' => array(
-        '#type' => 'view',
-        '#name' => 'contacts',
-        '#display_id' => 'default',
-        '#arguments' => array(),
-      ),
-    );
 
     // @Todo: Why do we need to call this?
     $view = Views::getView('contacts');
@@ -125,13 +142,17 @@ class CivicrmViewsTest extends CivicrmTestBase {
     $this->assertEqual(3, count($xpath), "There are 3 rows in the table.");
 
     foreach ($xpath as $key => $tr) {
-      if ($key == 0) continue; // Skip Default Organization
+      if ($key == 0) {
+        // Skip Default Organization.
+        continue;
+      }
 
-      $this->assertEqual("{$this->contact_data[$key - 1]['first_name']} {$this->contact_data[$key - 1]['last_name']}", trim((string) $tr->td[1]));
-      $this->assertEqual($this->contact_data[$key - 1]['api.email.create'][0]['email'], trim((string) $tr->td[2]));
-      $this->assertEqual($this->contact_data[$key - 1]['api.address.create'][0]['street_address'], trim((string) $tr->td[3]));
-      $this->assertEqual($this->contact_data[$key - 1]['api.entity_tag.create']['tag_id'], trim((string) $tr->td[4]));
+      $this->assertEqual("{$this->contactData[$key - 1]['first_name']} {$this->contactData[$key - 1]['last_name']}", trim((string) $tr->td[1]));
+      $this->assertEqual($this->contactData[$key - 1]['api.email.create'][0]['email'], trim((string) $tr->td[2]));
+      $this->assertEqual($this->contactData[$key - 1]['api.address.create'][0]['street_address'], trim((string) $tr->td[3]));
+      $this->assertEqual($this->contactData[$key - 1]['api.entity_tag.create']['tag_id'], trim((string) $tr->td[4]));
       $this->assertEqual('Default Organization', trim((string) $tr->td[5]));
     }
   }
+
 }
