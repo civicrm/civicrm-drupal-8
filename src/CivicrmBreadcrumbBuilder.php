@@ -32,11 +32,23 @@ class CivicrmBreadcrumbBuilder implements BreadcrumbBuilderInterface {
    */
   public function applies(RouteMatchInterface $route_match) {
     $route_object = $route_match->getRouteObject();
-    if ($route_object) {
-      $controller = $route_object->getDefault('_controller');
-      if (isset($controller) && $controller == 'Drupal\civicrm\Controller\CivicrmController::main') {
-        return TRUE;
-      }
+
+    // No route object is defined, so we can't inspect it.
+    if (!$route_object) {
+      return FALSE;
+    }
+
+    $controller = $route_object->getDefault('_controller');
+
+    // When we're looking at a page that does not come from a route to a
+    // controller (such as an entity, view, or something else), this can't be
+    // our CiviCRM controller.
+    if ($controller === NULL) {
+      return FALSE;
+    }
+
+    if ($controller === 'Drupal\civicrm\Controller\CivicrmController::main') {
+      return TRUE;
     }
     return FALSE;
   }
