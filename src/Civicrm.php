@@ -2,6 +2,7 @@
 
 namespace Drupal\civicrm;
 
+use Drupal\civicrm\Exception\CiviCRMConfigException;
 use Drupal\Core\Config\ConfigException;
 use Drupal\Core\Session\AccountInterface;
 
@@ -44,7 +45,7 @@ class Civicrm {
     $output = include_once $settingsFile;
     if ($output == FALSE) {
       $msg = t("The CiviCRM settings file (civicrm.settings.php) was not found in the expected location: %location", ['%location' => $settingsFile]) . ' ' . $errorMsgAdd;
-      throw new ConfigException($msg);
+      throw new CiviCRMConfigException($msg);
     }
 
     // This does pretty much all of the civicrm initialization.
@@ -53,7 +54,7 @@ class Civicrm {
       $msg = t("The path for including CiviCRM code files is not set properly. Most likely there is an error in the <em>civicrm_root</em> setting in your CiviCRM settings file (!1).",
           ['!1' => $settingsFile]
         ) . t("civicrm_root is currently set to: <em>!1</em>.", ['!1' => $civicrm_root]) . $errorMsgAdd;
-      throw new ConfigException($msg);
+      throw new CiviCRMConfigException($msg);
     }
 
     // Initialize the system by creating a config object.
