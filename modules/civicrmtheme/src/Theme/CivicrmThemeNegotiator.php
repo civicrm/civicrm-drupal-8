@@ -108,8 +108,11 @@ class CivicrmThemeNegotiator implements ThemeNegotiatorInterface {
 
     // If the public theme is configured and the user does not have permission
     // to access CiviCRM pages, use the public theme.
-    if (!$this->user->hasPermission('access CiviCRM') && $public_theme) {
-      return $public_theme;
+    if (!$this->user->hasPermission('access CiviCRM')) {
+      if ($public_theme) {
+        return $public_theme;
+      }
+      return NULL;
     }
 
     // Initialize CiviCRM and get the CiviCRM menu item definition for this
