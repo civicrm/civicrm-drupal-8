@@ -79,7 +79,9 @@ class CivicrmController extends ControllerBase {
     }
 
     // Synchronize the Drupal user with the Contacts database (why?)
-    $this->civicrm->synchronizeUser(User::load($this->currentUser()->id()));
+    if (!$this->currentUser()->isAnonymous()) {
+      $this->civicrm->synchronizeUser(User::load($this->currentUser()->id()));
+    }
 
     // Add CSS, JS, etc. that is required for this page.
     \CRM_Core_Resources::singleton()->addCoreResources();
