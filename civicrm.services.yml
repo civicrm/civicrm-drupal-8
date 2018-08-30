@@ -10,5 +10,6 @@ services:
       - { name: breadcrumb_builder, priority: 1002 }
   civicrm.path_processor:
     class: Drupal\civicrm\PathProcessor\CivicrmPathProcessor
+    arguments: ['@civicrm']
     tags:
       - { name: path_processor_inbound, priority: 250 }

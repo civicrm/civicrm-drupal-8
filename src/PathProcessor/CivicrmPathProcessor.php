@@ -12,45 +12,65 @@ use Drupal\civicrm\Civicrm;
 class CivicrmPathProcessor implements InboundPathProcessorInterface {
 
   /**
+   * The CiviCRM service.
+   *
+   * @var \Drupal\civicrm\Civicrm
+   */
+  protected $civiCRM;
+
+  /**
+   * CivicrmPathProcessor constructor.
+   *
+   * @param \Drupal\civicrm\Civicrm $civicrm
+   *   The CiviCRM service.
+   */
+  public function __construct(Civicrm $civicrm) {
+    $this->civiCRM = $civicrm;
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function processInbound($path, Request $request) {
-    // If the path is a civicrm path.
-    if (strpos($path, '/civicrm/') === 0) {
-      // Initialize civicrm.
-      $civicrm = new Civicrm();
-      $civicrm->initialize();
-      // Fetch civicrm menu items.
-      $items = \CRM_Core_Menu::items();
-      $longest = '';
-      foreach (array_keys($items) as $item) {
-        $item = '/' . $item;
-        // If he current path is a civicrm path.
-        if ((strpos($path, $item) === 0)) {
-          // Discover longest matching civicrm path in the request path.
-          if (strlen($item) > strlen($longest)) {
-            $longest = $item;
-          }
-        }
-      }
-      if (!empty($longest)) {
-        // Parse url component parameters from path.
-        $params = str_replace($longest, '', $path);
-        // Replace slashes with colons and the controller will piece it back
-        // together.
-        if (strlen($params)) {
-          $params = str_replace('/', ':', $params);
-          if (substr($params, 0, 1) == ':') {
-            $params = substr($params, 1);
-          }
-          return "$longest/$params";
-        }
-        else {
-          return $longest;
+    if (strpos($path, '/civicrm/') !== 0) {
+      return $path;
+    }
+
+    // Fetch civicrm menu items.
+    $this->civiCRM->initialize();
+    $items = \CRM_Core_Menu::items();
+
+    $longest = '';
+    foreach (array_keys($items) as $item) {
+      $item = '/' . $item;
+      // If the current path is a civicrm path.
+      if (strpos($path, $item) === 0) {
+        // Discover longest matching civicrm path in the request path.
+        if (strlen($item) > strlen($longest)) {
+          $longest = $item;
         }
       }
     }
-    return $path;
+
+    if ($longest === '') {
+      return $path;
+    }
+
+    // Parse url component parameters from path.
+    $params = str_replace($longest, '', $path);
+    // Replace slashes with colons and the controller will piece it back
+    // together.
+    if (strlen($params)) {
+      $params = str_replace('/', ':', $params);
+      // Params is a string, but we get the character at the first index and
+      // check if it is a colon. If it is, we should remove that.
+      if ($params[0] === ':') {
+        $params = substr($params, 1);
+      }
+      return "$longest/$params";
+    }
+
+    return $longest;
   }
 
 }
