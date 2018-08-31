@@ -126,8 +126,8 @@ class CivicrmThemeNegotiator implements ThemeNegotiatorInterface {
       return $public_theme;
     }
 
-    // If admin page and civicrm admin theme is set, apply civicrm admin theme.
-    if ($admin_theme) {
+    // If the current menu item is not public apply civicrm admin theme.
+    if (!\CRM_Utils_Array::value('is_public', $item) && ($admin_theme)) {
       return $admin_theme;
     }
 
