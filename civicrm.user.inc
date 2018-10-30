@@ -19,7 +19,7 @@ function civicrm_user_login(AccountInterface $account) {
  */
 function civicrm_user_insert(AccountInterface $account) {
   $civicrm = \Drupal::service('civicrm');
-  $civicrm->synchronizeUser($account);
+  $civicrm->initialize();
 
   // As per CRM-7858, the email address in CiviCRM isn't always set
   // with a call to synchronize(). So we force this through.
