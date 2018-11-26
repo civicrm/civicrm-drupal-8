@@ -83,9 +83,6 @@ class CivicrmController extends ControllerBase {
       $this->civicrm->synchronizeUser(User::load($this->currentUser()->id()));
     }
 
-    // Add CSS, JS, etc. that is required for this page.
-    \CRM_Core_Resources::singleton()->addCoreResources();
-
     // We set the CiviCRM markup as safe and assume all XSS (an other) issues
     // have already been taken care of.
     $build = [

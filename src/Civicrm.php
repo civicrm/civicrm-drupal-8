@@ -78,6 +78,9 @@ class Civicrm {
    */
   public function invoke($args) {
     $this->initialize();
+    
+    // Add CSS, JS, etc. that is required for this page.
+    \CRM_Core_Resources::singleton()->addCoreResources();
 
     // CiviCRM will echo/print directly to stdout. We need to capture it so that
     // we can return the output as a renderable array.
