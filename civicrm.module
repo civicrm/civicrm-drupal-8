@@ -71,7 +71,7 @@ function civicrm_toolbar() {
   // permissions can control it's visibility.
   $items['civicrm'] = [
     '#cache' => [
-      'contexts' => ['user.permissions'],
+      'contexts' => ['user.permissions', 'url.path'],
     ],
   ];
 
@@ -86,11 +86,22 @@ function civicrm_toolbar() {
         '#options' => [
           'attributes' => [
             'title' => t('CiviCRM'),
-            'class' => ['toolbar-item'],
           ],
         ],
       ],
     ];
+    // Add tray if we are on a CiviCRM screen
+    $path = ltrim(\Drupal::service('path.current')->getPath(), '/');
+    if (strpos($path, 'civicrm') === 0) {
+      $items['civicrm']['tray'] = [
+        '#wrapper_attributes' => [
+          'id' => 'toolbar-tray-civicrm',
+        ],
+        'content' => [
+          '#markup' => ' ',
+        ],
+      ];
+    }
   }
 
   return $items;
