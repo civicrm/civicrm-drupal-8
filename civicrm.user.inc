@@ -20,31 +20,27 @@ function civicrm_user_login(AccountInterface $account) {
 function civicrm_user_insert(AccountInterface $account) {
   $civicrm = \Drupal::service('civicrm');
   $civicrm->initialize();
-  
-  $userSystem = CRM_Core_Config::singleton()->userSystem;
-  $userSystemID = $userSystem->getBestUFID($account);
-  $uniqId = $userSystem->getBestUFUniqueIdentifier($account);
-  \CRM_Core_BAO_UFMatch::synchronizeUFMatch($user, $userSystemID, $uniqId, 'Drupal', NULL, 'Individual', $isLogin = FALSE);
 
-  // As per CRM-7858, the email address in CiviCRM isn't always set
-  // with a call to synchronize(). So we force this through.
-  $contact_id = \CRM_Core_BAO_UFMatch::getContactId($account->id());
-  if (empty($contact_id)) {
-    return;
-  }
-  \CRM_Core_BAO_UFMatch::updateContactEmail($contact_id, $account->getEmail());
-
-  // If already in CiviCRM, we don't do then next bit because it will cause
-  // the current request to exit, stopping execution.
   $config = CRM_Core_Config::singleton();
   if ($config->inCiviCRM) {
+    // Drupal user creation from CiviCRM contact happened in CiviCRM.
     return;
-  }
+  } 
+  else {
+    // Create CiviCRM contact from Drupal user.
+    $userSystem = CRM_Core_Config::singleton()->userSystem;
+    $userSystemID = $userSystem->getBestUFID($account);
+    $uniqId = $userSystem->getBestUFUniqueIdentifier($account);
+    \CRM_Core_BAO_UFMatch::synchronizeUFMatch($user, $userSystemID, $uniqId, 'Drupal', NULL, 'Individual', $isLogin = FALSE);
 
-  // Process any profile form fields that may have been submitted.
-  // In particular, this will pick up form fields that were submitted on the
-  // user_registration page.
-  \CRM_Core_BAO_UFGroup::getEditHTML($contact_id, '', 2, TRUE, FALSE, NULL, FALSE, $civicrm->getCtype());
+    // As per CRM-7858, the email address in CiviCRM isn't always set
+    // with a call to synchronize(). So we force this through.
+    $contact_id = \CRM_Core_BAO_UFMatch::getContactId($account->id());
+    if (empty($contact_id)) {
+      return;
+    }
+    \CRM_Core_BAO_UFMatch::updateContactEmail($contact_id, $account->getEmail());
+  }
 }
 
 /**
