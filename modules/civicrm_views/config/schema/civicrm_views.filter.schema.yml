@@ -1,0 +1,15 @@
+views.filter_value.civicrm_date_operator:
+  type: views.filter_value.numeric
+  label: 'CiviCRM Date'
+  mapping:
+    type:
+      type: string
+      label: 'Type'
+
+views.filter.civicrm_date_operator:
+  type: views.filter.numeric
+  label: 'CiviCRM Date'
+  mapping:
+    type:
+      type: string
+      label: 'Type'

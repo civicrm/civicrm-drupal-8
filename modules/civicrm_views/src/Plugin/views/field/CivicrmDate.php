@@ -6,7 +6,7 @@ use Drupal\views\Plugin\views\field\Date;
 use Drupal\views\ResultRow;
 
 /**
- * Maps drupal views' date handling to match CiviCRMs.
+ * Maps drupal views date handling to match CiviCRMs.
  *
  * @ingroup views_field_handlers
  *

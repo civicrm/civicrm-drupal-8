@@ -570,6 +570,7 @@ function _civicrm_views_field_to_field_plugin($entity, $field) {
         'id' => 'url',
       ];
 
+    case 12:
     case CRM_Utils_Type::T_DATE:
     case CRM_Utils_Type::T_TIMESTAMP:
       return [
@@ -608,8 +609,6 @@ function _civicrm_views_field_to_sort_plugin($entity, $field) {
  * Map views fields to filter plugin types.
  *
  * @see _civicrm_views_field_to_field_plugin
- *
- * @Todo: filtering for dates
  */
 function _civicrm_views_field_to_filter_plugin($entity, $field) {
   $type = !empty($field['pseudoconstant']) ? 'pseudoconstant' : $field['type'];
@@ -635,6 +634,13 @@ function _civicrm_views_field_to_filter_plugin($entity, $field) {
     case CRM_Utils_Type::T_EMAIL:
       return [
         'id' => 'string',
+      ];
+
+    case 12:
+    case CRM_Utils_Type::T_DATE:
+    case CRM_Utils_Type::T_TIMESTAMP:
+      return [
+        'id' => 'civicrm_date_operator',
       ];
 
     case 'pseudoconstant':
