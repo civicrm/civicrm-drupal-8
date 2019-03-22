@@ -1,34 +1,30 @@
 CiviCRM Drupal 8 Module
 =======================
 
-This is alpha version of the integration module required to allow CiviCRM and 
-Drupal 8 to work together. This is not the stable version yet.
+This is a beta version of the integration module required to allow CiviCRM and 
+Drupal 8 to work together.
 
-It it currently verified to work against Drupal 8.0.5 and CiviCRM 4.7.3.
+Creating a new Drupal 8 site
+----------------------------
 
-Installation Steps
-------------------
+To setup a new Drupal 8 installation with CiviCRM, there is a convenient
+Composer template. This is the easiest way to get started for evaluating
+CiviCRM on Drupal 8 or participating in development.
 
-- Download the latest Drupal 8 release: https://www.drupal.org/project/drupal.
-- Install Drupal 8 (see https://api.drupal.org/api/drupal/core!INSTALL.txt/8 
-for more information).
-- Create a top level `libraries` folder inside Drupal and download CiviCRM 
-master (for Drupal 7) (from http://dist.civicrm.org/by-date/latest/master/) so 
-that CiviCRM resides at `/libraries/civicrm`. CiviCRM can also be installed in 
-/modules/civicrm - see CRM-18222.
-- If it exists, remove the Drupal 7 module folder from within CiviCRM 
-(`libraries/civicrm/drupal`).
-- Clone the Drupal 8 module into the the top level `modules` directory: 
-`git clone -b 8.x-master https://github.com/civicrm/civicrm-drupal-8.git 
-civicrm`
-- Edit civicrm-version.php and change the 'cms' value from 'Drupal' to 
-'Drupal8'. If you are reading this after having already installed CiviCRM and 
-running into an undefined `arg(0)` error, change the CIVICRM\_UF value in your 
-civicrm.settings.php file.
-- If you want the installer to load dummy contacts and data, add the following 
-configuration parameter to
- `sites/default/settings.php`: `$settings['civicrm_load_generated'] = TRUE;`
-- Finally, in your browser go to `/admin/modules` and install CiviCRM Core. 
-You should be notified of any issues that will prevent the installation from 
-being successful, including file permissions, etc., which you will need to 
-resolve before the installation can completed.
+**See
+[https://gitlab.com/roundearth/drupal-civicrm-project](https://gitlab.com/roundearth/drupal-civicrm-project)**
+
+Adding to an existing site
+--------------------------
+
+Installing CiviCRM on Drupal 8 requires Composer, so your Drupal 8 site needs
+to be fully 'Composerized', ie. starting from the
+[drupal-composer/drupal-project](https://github.com/drupal-composer/drupal-project)
+Composer template.
+
+Assuming that is the case, there is a convenient Composer plugin than can
+easily install CiviCRM to your Drupal 8 site.
+
+**See
+[https://gitlab.com/roundearth/civicrm-composer-plugin](https://gitlab.com/roundearth/civicrm-composer-plugin)**
+
