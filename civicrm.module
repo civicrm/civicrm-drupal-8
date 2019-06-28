@@ -294,6 +294,15 @@ function _civicrm_user_register_form_validate(&$form, FormStateInterface $form_s
 }
 
 /**
+ * Determine if the user is on a CiviCRM generated page.
+ *
+ * i.e. does the form have some civicrm unique token?
+ */
+function civicrm_on_user_page() {
+  return isset($_POST['_qf_default']);
+}
+
+/**
  * Implements hook_theme().
  */
 function civicrm_theme() {
