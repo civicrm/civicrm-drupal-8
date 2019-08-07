@@ -30,6 +30,11 @@
     "civicrm/civicrm-core" : ">=5.4.0"
   },
   "extra": {
-    "installer-name": "civicrm"
+    "installer-name": "civicrm",
+    "drush": {
+      "services": {
+        "drush.services.yml": "^9"
+      }
+    }
   }
 }

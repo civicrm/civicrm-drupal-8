@@ -1,0 +1,7 @@
+services:
+  civicrm.commands:
+    class: \Drupal\civicrm\Commands\CivicrmCommands
+    arguments:
+      - '@module_handler'
+    tags:
+      - { name: drush.command }
