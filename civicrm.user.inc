@@ -20,7 +20,7 @@ function civicrm_user_login(AccountInterface $account) {
 function civicrm_user_insert(AccountInterface $account) {
   $civicrm = \Drupal::service('civicrm');
   $civicrm->initialize();
-  
+  civicrm_key_disable();
   $userSystem = CRM_Core_Config::singleton()->userSystem;
   $userSystemID = $userSystem->getBestUFID($account);
   $uniqId = $userSystem->getBestUFUniqueIdentifier($account);
