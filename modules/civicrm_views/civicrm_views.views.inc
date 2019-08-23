@@ -626,6 +626,12 @@ function _civicrm_views_field_to_filter_plugin($entity, $field) {
       return [
         'id' => 'numeric',
       ];
+    
+    case CRM_Utils_Type::T_DATE:
+    case CRM_Utils_Type::T_TIMESTAMP:
+      return array(
+        'id' => 'civicrm_date',
+      );
 
     case CRM_Utils_Type::T_ENUM:
     case CRM_Utils_Type::T_STRING:
