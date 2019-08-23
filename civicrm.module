@@ -262,6 +262,7 @@ function _civicrm_get_profiles($contact_id) {
 function civicrm_form_user_register_form_alter(&$form, &$form_state, $form_id) {
   $civicrm = \Drupal::service('civicrm');
   $civicrm->initialize();
+  civicrm_key_disable();
   $html = \CRM_Core_BAO_UFGroup::getEditHTML(NULL, '', NULL, TRUE, TRUE, NULL, FALSE, $civicrm->getCtype());
 
   // Need to disable the page cache.
@@ -284,6 +285,7 @@ function civicrm_form_user_register_form_alter(&$form, &$form_state, $form_id) {
  */
 function _civicrm_user_register_form_validate(&$form, FormStateInterface $form_state) {
   \Drupal::service('civicrm')->initialize();
+  civicrm_key_disable();
   $errors = CRM_Core_BAO_UFGroup::isValid(NULL, '', TRUE);
 
   if (is_array($errors)) {
@@ -325,4 +327,14 @@ function civicrm_theme() {
  */
 function template_preprocess_civicrm_contact(&$vars) {
   $vars['civicrm_contact'] = $vars['elements']['#civicrm_contact'];
+}
+
+/**
+ * Disable civicrm key for all forms that interact with the CMS.
+ *
+ * We do not control the CMS form generation and hence should suppress
+ * qfKey
+ */
+function civicrm_key_disable() {
+  \CRM_Core_Config::singleton()->keyDisable = TRUE;
 }
