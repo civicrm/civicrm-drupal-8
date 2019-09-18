@@ -1,18 +1,46 @@
 CiviCRM Drupal 8 Module
 =======================
 
-This is alpha version of the integration module required to allow CiviCRM and Drupal 8 to work together. This is not the stable version yet.
+This is the integration module required to allow CiviCRM and Drupal 8 to work together. This is not the stable version yet.
 
-It it currently verified to work against Drupal 8.0.5 and CiviCRM 4.7.3.
+For Views integration, please use: [civicrm_entity](https://github.com/eileenmcnaughton/civicrm_entity/tree/8.x-3.x). As per [dev/drupal#39](https://lab.civicrm.org/dev/drupal/issues/39), the views integration from this module will soon be removed.
 
-Installation Steps
-------------------
+Installation
+------------
 
-- Download the latest Drupal 8 release: (from https://www.drupal.org/project/drupal).
-- Install Drupal 8 (see https://api.drupal.org/api/drupal/core!INSTALL.txt/8 for more information).
-- Create a top level `libraries` folder inside Drupal and download CiviCRM master (for Drupal 7) (from http://dist.civicrm.org/by-date/latest/master/) so that CiviCRM resides at `/libraries/civicrm`. CiviCRM can also be installed in /modules/civicrm - see CRM-18222.
-- If it exists, remove the Drupal 7 module folder from within CiviCRM (`libraries/civicrm/drupal`).
-- Clone the Drupal 8 module into the the top level `modules` directory (this is where Drupal 8 contributed modules live now): `git clone -b 8.x-master https://github.com/civicrm/civicrm-drupal.git civicrm`
-- Edit civicrm-version.php and change the 'cms' value from 'Drupal' to 'Drupal8'. If you are reading this after having already installed CiviCRM and running into an undefined `arg(0)` error, change the CIVICRM_UF value in your civicrm.settings.php file.
-- If you want the installer to load dummy contacts and data, add the following configuration parameter to `sites/default/settings.php`: `$settings['civicrm_load_generated'] = TRUE;`
-- Finally, in your browser go to `/admin/modules` and install CiviCRM Core. You should be notified of any issues that will prevent the installation from being successful, including file permissions, etc., which you will need to resolve before the installation can complete.
+Please see the guides available on this page:  
+https://lab.civicrm.org/dev/drupal/wikis/drupal8-composer
+
+Contribute
+----------
+
+If you want to contribute to the development of this module, please bear the following in mind:
+
+* We currently do not have any automated testing setup on Drupal8, so please do a fair amount of testing.
+* Many of the pull-request reviewers are not yet fully up to date on Drupal8. Please provide enough information so that we can understand the proposed change and the potential impacts.
+* Any views pull-request will be closed, except if it's to remove the Views integration (c.f. [dev/drupal#39](https://lab.civicrm.org/dev/drupal/issues/39)).
+* Please open issues on CiviCRM's Gitlab: https://lab.civicrm.org/dev/drupal/issues/
+
+If you have any questions, please join the [Drupal channel on CiviCRM's chat](https://chat.civicrm.org/civicrm/channels/drupal)
+
+We are very grateful for the contributions so far, a lot of amazing work has been done already. The CiviCRM Drupal8 integration is almost ready and there are many organisations already using it in production. However, we also need to invest into improving some of the CiviCRM core bits that will make it easier to use Composer, improve our continuous integration and test coverage for Drupal, and fix a few remaining difficult issues that for now require various workarounds.
+
+Please consider contribution financially to making an official Drupal8 release happen:  
+https://civicrm.org/make-it-happen/civicrm-drupal-8-the-official-release
+
+Welcome to CiviCRM and thank you for contributing!
+
+About CiviCRM
+-------------
+
+CiviCRM is web-based, open source, Constituent Relationship Management (CRM) software geared toward meeting the needs of non-profit and other civic-sector organizations.
+
+As a non profit committed to the public good itself, CiviCRM understands that forging and growing strong relationships with constituents is about more than collecting and tracking constituent data - it is about sustaining relationships with supporters over time.
+
+To this end, CiviCRM has created a robust web-based, open source, highly customizable, CRM to meet organizations’ highest expectations right out-of-the box. Each new release of this open source software reflects the very real needs of its users as enhancements are continually given back to the community.
+
+With CiviCRM's robust feature set, organizations can further their mission through contact management, fundraising, event management, member management, mass e-mail marketing, peer-to-peer campaigns, case management, and much more.
+
+CiviCRM is localized in over 20 languages including: Chinese (Taiwan, China), Dutch, English (Australia, Canada, U.S., UK), French (France, Canada), German, Italian, Japanese, Russian, and Swedish.
+
+For more information, visit the CiviCRM website.
