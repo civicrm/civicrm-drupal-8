@@ -11,6 +11,18 @@ use Drupal\Core\Session\AccountInterface;
  * Implements hook_user_login().
  */
 function civicrm_user_login(AccountInterface $account) {
+  $civicrm = \Drupal::service('civicrm');
+  $civicrm->initialize();
+
+  if (\Drupal::hasService('masquerade')) {
+    // https://github.com/civicrm/civicrm-drupal-8/pull/31
+    // In theory this is harmless whether we masquerade or not, but for now narrowing
+    // the scope, in case it causes regressions.
+    // Not using isMasquerading() because it does not seem to be
+    // initialized at this point (it always returns false).
+    \CRM_Core_Session::singleton()->reset(FALSE);
+  }
+
   \Drupal::service('civicrm')->synchronizeUser($account);
 }
 
