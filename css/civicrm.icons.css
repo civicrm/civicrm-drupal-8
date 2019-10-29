@@ -18,8 +18,7 @@
 .no-svg .toolbar-bar .toolbar-icon-civicrm.active:before {
   background-image: url("../icons/ffffff/CiviCRM.png");
 }
-  
-  
+
 /* Tray Icons */
 .toolbar-tray .toolbar-icon-civicrm:before {
   background-image: url("../icons/787878/CiviCRM.svg");
