@@ -1,0 +1,36 @@
+/**
+ * @file
+ * Styling for CiviCRM toolbar icons.
+ */
+
+/* Bar Icons */
+.toolbar-bar .toolbar-icon-civicrm:before {
+  background-image: url("../icons/bebebe/CiviCRM.svg");
+}
+.no-svg .toolbar-bar .toolbar-icon-civicrm:before {
+  background-image: url("../icons/bebebe/CiviCRM.png");
+}
+.toolbar-bar .toolbar-icon-civicrm:active:before,
+.toolbar-bar .toolbar-icon-civicrm.is-active:before {
+  background-image: url("../icons/ffffff/CiviCRM.svg");
+}
+.no-svg .toolbar-bar .toolbar-icon-civicrm:active:before,
+.no-svg .toolbar-bar .toolbar-icon-civicrm.active:before {
+  background-image: url("../icons/ffffff/CiviCRM.png");
+}
+
+/* Tray Icons */
+.toolbar-tray .toolbar-icon-civicrm:before {
+  background-image: url("../icons/787878/CiviCRM.svg");
+}
+.no-svg .toolbar-tray .toolbar-icon-civicrm:before {
+  background-image: url("../icons/787878/CiviCRM.png");
+}
+.toolbar-tray .toolbar-icon-civicrm:active:before,
+.toolbar-tray .toolbar-icon-civicrm.is-active:before {
+  background-image: url("../icons/000000/CiviCRM.svg");
+}
+.no-svg .toolbar-tray .toolbar-icon-civicrm:active:before,
+.no-svg .toolbar-tray .toolbar-icon-civicrm.active:before {
+  background-image: url("../icons/000000/CiviCRM.png");
+}

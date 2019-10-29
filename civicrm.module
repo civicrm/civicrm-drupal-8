@@ -86,9 +86,19 @@ function civicrm_toolbar() {
         '#options' => [
           'attributes' => [
             'title' => t('CiviCRM'),
+            'class' => array(
+              'toolbar-item',
+              'toolbar-icon',
+              'toolbar-icon-civicrm',
+            )
           ],
         ],
       ],
+      '#attached' => [
+        'library' => [
+          'civicrm/civicrm-icons',
+        ]
+      ]
     ];
     // Add tray if we are on a CiviCRM screen
     $path = ltrim(\Drupal::service('path.current')->getPath(), '/');
