@@ -26,7 +26,7 @@ function civicrm_user_insert(AccountInterface $account) {
   if ($config->inCiviCRM) {
     // Drupal user creation from CiviCRM contact happened in CiviCRM.
     return;
-  } 
+  }
   else {
     // Create CiviCRM contact from Drupal user.
     $userSystem = CRM_Core_Config::singleton()->userSystem;
@@ -46,8 +46,9 @@ function civicrm_user_insert(AccountInterface $account) {
     // In particular, this will pick up form fields that were submitted on the
     // user_registration page.
     if (civicrm_on_user_page()) {
-        \CRM_Core_BAO_UFGroup::getEditHTML($contact_id, '', 2, TRUE, FALSE, NULL, FALSE, $civicrm->getCtype());
+      \CRM_Core_BAO_UFGroup::getEditHTML($contact_id, '', 2, TRUE, FALSE, NULL, FALSE, $civicrm->getCtype());
     }
+  }
 }
 
 /**
