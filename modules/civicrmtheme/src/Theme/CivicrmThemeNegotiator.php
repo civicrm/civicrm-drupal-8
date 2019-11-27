@@ -96,29 +96,38 @@ class CivicrmThemeNegotiator implements ThemeNegotiatorInterface {
   public function determineActiveTheme(RouteMatchInterface $route_match) {
     $path = ltrim($route_match->getRouteObject()->getPath(), '/');
 
-    // Initialize CiviCRM.
-    $this->civicrm->initialize();
-
-    // Get the menu for above URL.
-    $item = \CRM_Core_Menu::get($path);
-
     $config = $this->configFactory->get('civicrmtheme.settings');
     $admin_theme = $config->get('admin_theme');
     $public_theme = $config->get('public_theme');
 
-    // Check for public pages:
-    // * If public page and civicrm public theme is set, apply civicrm public
-    // theme.
-    // * If user does not have access to CiviCRM use the public page for the
-    // error message.
-    if (!$this->user->hasPermission('access CiviCRM') || \CRM_Utils_Array::value('is_public', $item)) {
+    // If neither the admin_theme or public theme have been set, we return NULL
+    // to let Drupal choose the correct active theme.
+    if (!$admin_theme && !$public_theme) {
+      return NULL;
+    }
+
+    // If the public theme is configured and the user does not have permission
+    // to access CiviCRM pages, use the public theme.
+    if (!$this->user->hasPermission('access CiviCRM')) {
       if ($public_theme) {
         return $public_theme;
       }
+      return NULL;
     }
-    elseif ($admin_theme) {
-      // If admin page and civicrm admin theme is set, apply civicrm admin
-      // theme.
+
+    // Initialize CiviCRM and get the CiviCRM menu item definition for this
+    // path.
+    $this->civicrm->initialize();
+    $item = \CRM_Core_Menu::get($path);
+
+    // If the current menu item is public, we use the public theme, in other
+    // cases the admin_theme is used.
+    if (\CRM_Utils_Array::value('is_public', $item) && $public_theme) {
+      return $public_theme;
+    }
+
+    // If the current menu item is not public apply civicrm admin theme.
+    if (!\CRM_Utils_Array::value('is_public', $item) && ($admin_theme)) {
       return $admin_theme;
     }
 

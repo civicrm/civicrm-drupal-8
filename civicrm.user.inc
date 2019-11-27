@@ -20,6 +20,7 @@ function civicrm_user_login(AccountInterface $account) {
 function civicrm_user_insert(AccountInterface $account) {
   $civicrm = \Drupal::service('civicrm');
   $civicrm->initialize();
+  civicrm_key_disable();
 
   $config = CRM_Core_Config::singleton();
   if ($config->inCiviCRM) {
@@ -40,7 +41,13 @@ function civicrm_user_insert(AccountInterface $account) {
       return;
     }
     \CRM_Core_BAO_UFMatch::updateContactEmail($contact_id, $account->getEmail());
-  }
+
+    // Process any profile form fields that may have been submitted.
+    // In particular, this will pick up form fields that were submitted on the
+    // user_registration page.
+    if (civicrm_on_user_page()) {
+        \CRM_Core_BAO_UFGroup::getEditHTML($contact_id, '', 2, TRUE, FALSE, NULL, FALSE, $civicrm->getCtype());
+    }
 }
 
 /**
