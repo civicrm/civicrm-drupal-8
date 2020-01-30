@@ -34,7 +34,6 @@ function civicrm_requirements($phase) {
   if ($civicrm_base) {
     $requirements['civicrm.location'] = [
       'title' => 'CiviCRM location',
-      'value' => $civicrm_base,
       'severity' => REQUIREMENT_OK,
       'description' => 'CiviCRM core directory',
     ];
@@ -42,7 +41,6 @@ function civicrm_requirements($phase) {
   else {
     $requirements['civicrm.location'] = [
       'title' => 'CiviCRM location',
-      'value' => NULL,
       'severity' => REQUIREMENT_ERROR,
       'description' => 'CiviCRM must be installed via composer.',
     ];
@@ -54,7 +52,6 @@ function civicrm_requirements($phase) {
   if ($phase === 'install' && !$setup->checkAuthorized()->isAuthorized()) {
     $requirements['civicrm.checkAuthorized'] = [
       'title' => 'CiviCRM Installation Not Authorized',
-      'value' => NULL,
       'description' => 'The current user does not have sufficient permissions to perform installation.',
       'severity' => REQUIREMENT_WARNING,
     ];
@@ -77,21 +74,12 @@ function civicrm_requirements($phase) {
     $key = 'civicrm.' . $msg['section'] . '.' . $msg['name'];
     $requirements[$key] = [
       'title' => $section . ': ' . $msg['message'],
-      'value' => NULL,
-      'description' => '',
+      'description' => $section . ': ' . $msg['message'],
       'severity' => $severityMap[$msg['severity']],
     ];
   }
 
   ksort($requirements);
-
-  $errors = $setup->checkRequirements()->getErrors();
-  if ($phase === 'install' && \Civi\Setup\DrupalUtil::isDrush() && $errors) {
-    // Ugh. "drush8 en civicrm -v" doesn't report why installation fails, so we compensate...
-    foreach ($errors as $error) {
-      drush_print("ERROR: " .$error['message'], 0, STDERR);
-    }
-  }
 
   return $requirements;
 }
