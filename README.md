@@ -4,7 +4,7 @@ CiviCRM Drupal 8 Module
 This is a beta version of the integration module required to allow CiviCRM and 
 Drupal 8 to work together.
 
-For Views integration, please use: [civicrm_entity](https://github.com/eileenmcnaughton/civicrm_entity/tree/8.x-3.x). As per [dev/drupal#39](https://lab.civicrm.org/dev/drupal/issues/39), the views integration from this module will soon be removed.
+For Views integration, please use: [civicrm_entity](https://github.com/eileenmcnaughton/civicrm_entity/tree/8.x-3.x). As per [dev/drupal#39](https://lab.civicrm.org/dev/drupal/issues/39), the views integration from this module has been removed.
 
 Creating a new Drupal 8 site
 ----------------------------
@@ -40,7 +40,6 @@ If you want to contribute to the development of this module, please bear the fol
 
 * We currently do not have any automated testing setup on Drupal8, so please do a fair amount of testing.
 * Many of the pull-request reviewers are not yet fully up to date on Drupal8. Please provide enough information so that we can understand the proposed change and the potential impacts.
-* Any views pull-request will be closed, except if it's to remove the Views integration (c.f. [dev/drupal#39](https://lab.civicrm.org/dev/drupal/issues/39)).
 * Please open issues on CiviCRM's Gitlab: https://lab.civicrm.org/dev/drupal/issues/
 
 If you have any questions, please join the [Drupal channel on CiviCRM's chat](https://chat.civicrm.org/civicrm/channels/drupal)
