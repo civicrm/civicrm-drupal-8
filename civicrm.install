@@ -127,6 +127,12 @@ function _civicrm_setup() {
  *   if we can't.
  */
 function _civicrm_find_civicrm() {
+  // TODO: This works with standard composer layouts but would be easy to break
+  // via installer-paths. However, it should be possible to replace this - since we
+  // can count on composer's autoloader being setup already. Some ideas:
+  //  - Use ReflectionClass('Civi') to find the path
+  //  - Update `Civi.php` to provide a function with its __DIR__
+
   $possible_paths = [];
 
   if ($path = drupal_get_path('module', 'civicrm')) {
