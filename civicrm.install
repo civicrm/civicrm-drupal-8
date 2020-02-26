@@ -14,6 +14,12 @@ function civicrm_install() {
   /** @var \Civi\Setup $setup */
   $setup = _civicrm_setup();
 
+  if ($setup->getPendingAction() !== NULL) {
+    // Ex: If you do an advanced installation with `cv core:install`, then
+    // `hook_install` shouldn't activate the default/unconfigured install.
+    return;
+  }
+
   $installed = $setup->checkInstalled();
   if ($installed->isSettingInstalled() || $installed->isDatabaseInstalled()) {
     drupal_set_message(t("CiviCRM appears to have already been installed. Skipping full installation."));
