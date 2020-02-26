@@ -20,7 +20,7 @@ function civicrm_user_login(AccountInterface $account) {
 function civicrm_user_insert(AccountInterface $account) {
   $civicrm = \Drupal::service('civicrm');
   $civicrm->initialize();
-  
+  civicrm_key_disable();
   $userSystem = CRM_Core_Config::singleton()->userSystem;
   $userSystemID = $userSystem->getBestUFID($account);
   $uniqId = $userSystem->getBestUFUniqueIdentifier($account);
@@ -44,7 +44,9 @@ function civicrm_user_insert(AccountInterface $account) {
   // Process any profile form fields that may have been submitted.
   // In particular, this will pick up form fields that were submitted on the
   // user_registration page.
-  \CRM_Core_BAO_UFGroup::getEditHTML($contact_id, '', 2, TRUE, FALSE, NULL, FALSE, $civicrm->getCtype());
+  if (civicrm_on_user_page()) {
+    \CRM_Core_BAO_UFGroup::getEditHTML($contact_id, '', 2, TRUE, FALSE, NULL, FALSE, $civicrm->getCtype());
+  }
 }
 
 /**

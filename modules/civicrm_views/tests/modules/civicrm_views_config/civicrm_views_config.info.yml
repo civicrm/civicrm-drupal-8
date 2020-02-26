@@ -1,9 +1,0 @@
-name: 'CiviCRM Views Test Config'
-type: module
-description: 'Provides default views for tests.'
-package: Testing
-core: 8.x
-dependencies:
-  - views
-  - civicrm
-  - civicrm_views
