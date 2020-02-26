@@ -348,30 +348,3 @@ function template_preprocess_civicrm_contact(&$vars) {
 function civicrm_key_disable() {
   \CRM_Core_Config::singleton()->keyDisable = TRUE;
 }
-
-/**
- * Clear civicrm caches using the API.
- */
-function civicrm_clear_cache() {
-  \Drupal::service('civicrm')->initialize();
-
-  // todo: Add options to command.
-//  if (drush_get_option('triggers', FALSE)) {
-    $params['triggers'] = 1;
-//  }
-
-//  if (drush_get_option('sessions', FALSE)) {
-    $params['session'] = 1;
-//  }
-
-  // Need to set API version or drush cc civicrm fails.
-  $params['version'] = 3;
-  $result = civicrm_api('System', 'flush', $params);
-
-  if ($result['is_error']) {
-    drush_log(dt('An error occurred: !message', ['!message' => $result['error_message']]), 'error');
-    return;
-  }
-
-  drush_log(dt('The CiviCRM cache has been cleared.'), 'ok');
-}
