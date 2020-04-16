@@ -125,7 +125,7 @@ class UserProfile extends FormBase {
     // Somehow, somewhere, CiviCRM is processing our form. I have no idea how.
     // Invalidate caches for user, so that latest profile information shows.
     Cache::invalidateTags(['user:' . $this->user->id()]);
-    drupal_set_message($this->t("Profile successfully updated."));
+    $this->messenger()->addMessage($this->t("Profile successfully updated."));
   }
 
   /**
