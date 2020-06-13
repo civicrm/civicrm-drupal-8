@@ -2,4 +2,4 @@ name: CiviCRM Core
 type: module
 description: 'Constituent Relationship Management system. Allows sites to manage contacts, relationships and groups, and track contact activities, contributions, memberships and events.'
 package: CiviCRM
-core: 8.x
+core_version_requirement: ^8.7.7 || ^9
