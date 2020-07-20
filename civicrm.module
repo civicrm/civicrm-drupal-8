@@ -86,19 +86,19 @@ function civicrm_toolbar() {
         '#options' => [
           'attributes' => [
             'title' => t('CiviCRM'),
-            'class' => array(
+            'class' => [
               'toolbar-item',
               'toolbar-icon',
               'toolbar-icon-civicrm',
-            )
+            ],
           ],
         ],
       ],
       '#attached' => [
         'library' => [
           'civicrm/civicrm-icons',
-        ]
-      ]
+        ],
+      ],
     ];
     // Add tray if we are on a CiviCRM screen
     $path = ltrim(\Drupal::service('path.current')->getPath(), '/');
@@ -265,6 +265,15 @@ function _civicrm_get_profiles($contact_id) {
 }
 
 /**
+ * Implements hook_form_user_form_alter().
+ */
+function civicrm_form_user_form_alter(&$form, &$form_state, $form_id) {
+  // Email is required because otherwise synchronization with contacts
+  // doesn't work.
+  $form['account']['mail']['#required'] = TRUE;
+}
+
+/**
  * Implements hook_form_TAG_ID_alter().
  *
  * Attach any relevant profile form fields to user registration form.
@@ -280,6 +289,10 @@ function civicrm_form_user_register_form_alter(&$form, &$form_state, $form_id) {
 
   // We need the CiviCRM core Javascript.
   CRM_Core_Resources::singleton()->addCoreResources();
+
+  // Email is required because otherwise synchronization with contacts
+  // doesn't work.
+  $form['account']['mail']['#required'] = TRUE;
 
   $form['civicrm_profile_register'] = [
     '#markup' => Markup::create($html),
