@@ -368,7 +368,7 @@ function civicrm_key_disable() {
 function civicrm_metatags_alter(array &$metatags, array &$context) {
   $routeDetails = \Drupal::routeMatch()->getRouteObject()->getDefaults();
   // If this is a CiviCRM Route.
-  if ($routeDetails['_controller'] === 'Drupal\civicrm\Controller\CivicrmController::main') {
+  if (isset($routeDetails['_controller']) && $routeDetails['_controller'] === 'Drupal\civicrm\Controller\CivicrmController::main') {
 
     /** @var \Drupal\civicrm\CivicrmPageState $page_state */
     $page_state = \Drupal::service('civicrm.page_state');
