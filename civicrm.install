@@ -22,7 +22,7 @@ function civicrm_install() {
 
   $installed = $setup->checkInstalled();
   if ($installed->isSettingInstalled() || $installed->isDatabaseInstalled()) {
-    drupal_set_message(t("CiviCRM appears to have already been installed. Skipping full installation."));
+    \Drupal::messenger()->addMessage(t("CiviCRM appears to have already been installed. Skipping full installation."));
   }
 
   $setup->installFiles();
