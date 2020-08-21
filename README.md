@@ -1,37 +1,15 @@
 CiviCRM Drupal 8 Module
 =======================
 
-This is a beta version of the integration module required to allow CiviCRM and 
+This is the integration module required to allow CiviCRM and 
 Drupal 8 to work together.
 
 For Views integration, please use: [civicrm_entity](https://github.com/eileenmcnaughton/civicrm_entity/tree/8.x-3.x). As per [dev/drupal#39](https://lab.civicrm.org/dev/drupal/issues/39), the views integration from this module has been removed.
 
-Creating a new Drupal 8 site
+Documentation
 ----------------------------
 
-To setup a new Drupal 8 installation with CiviCRM, there is a convenient
-Composer template. This is the easiest way to get started for evaluating
-CiviCRM on Drupal 8 or participating in development.
-
-**See
-[https://gitlab.com/roundearth/drupal-civicrm-project](https://gitlab.com/roundearth/drupal-civicrm-project)**
-
-More notes are available on this page:  
-https://lab.civicrm.org/dev/drupal/wikis/drupal8-composer
-
-Adding to an existing site
---------------------------
-
-Installing CiviCRM on Drupal 8 requires Composer, so your Drupal 8 site needs
-to be fully 'Composerized', ie. starting from the
-[drupal-composer/drupal-project](https://github.com/drupal-composer/drupal-project)
-Composer template.
-
-Assuming that is the case, there is a convenient Composer plugin than can
-easily install CiviCRM to your Drupal 8 site.
-
-**See
-[https://gitlab.com/roundearth/civicrm-composer-plugin](https://gitlab.com/roundearth/civicrm-composer-plugin)**
+To install CiviCRM on Drupal 8 see the [Drupal 8 section of the CiviCRM Installation Guide](https://docs.civicrm.org/installation/en/latest/drupal8/)
 
 Contribute
 ----------
@@ -45,9 +23,6 @@ If you want to contribute to the development of this module, please bear the fol
 If you have any questions, please join the [Drupal channel on CiviCRM's chat](https://chat.civicrm.org/civicrm/channels/drupal)
 
 We are very grateful for the contributions so far, a lot of amazing work has been done already. The CiviCRM Drupal8 integration is almost ready and there are many organisations already using it in production. However, we also need to invest into improving some of the CiviCRM core bits that will make it easier to use Composer, improve our continuous integration and test coverage for Drupal, and fix a few remaining difficult issues that for now require various workarounds.
-
-Please consider contribution financially to making an official Drupal8 release happen:  
-https://civicrm.org/make-it-happen/civicrm-drupal-8-the-official-release
 
 Welcome to CiviCRM and thank you for contributing!
 
