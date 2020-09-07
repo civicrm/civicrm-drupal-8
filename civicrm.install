@@ -33,6 +33,42 @@ function civicrm_install() {
  * Implements hook_requirements().
  */
 function civicrm_requirements($phase) {
+
+  if ($phase == 'runtime') {
+
+    $requirements = [];
+
+    // Check we have a functioning civicrm instance.
+    $civicrm =  \Drupal::service('civicrm');
+    $civicrm->initialize();
+    if (!$civicrm->isInitialized()) {
+      $requirements['civicrm.intialized'] = [
+      'title' => 'CiviCRM Initialized',
+      'severity' => REQUIREMENT_ERROR,
+      'description' => t('Civicrm failed to Initialize. For further information see the <a href=":url">install guide</a>', [':url' => 'https://docs.civicrm.org/installation/en/latest/drupal8/']),
+      ];
+      return $requirements;
+    }
+
+    // Civicrm Initialize ran.
+    // Check that civicrm.settings.php is not writable.
+
+    if (is_writable(CIVICRM_SETTINGS_PATH)){
+      $requirements['civicrm.settingsfile'] = [
+      'title' => 'CiviCRM Settings File writeable',
+      'severity' => REQUIREMENT_WARNING,
+      'description' => t('civicrm.settings.php should not be writable. Please check the
+permissions on this file. For more information see <a href=":url">install guide</a>', [':url' => 'https://docs.civicrm.org/installation/en/latest/drupal8/']),
+      ];
+    }
+
+    // @todo include further checks here to confirm that civicrm is
+    // healthy - potentially emit errors/warnings from System.check
+    return $requirements;
+
+  }
+
+
   $requirements = [];
 
   $civicrm_base = _civicrm_find_civicrm();
