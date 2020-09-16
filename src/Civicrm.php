@@ -29,12 +29,12 @@ class Civicrm {
     }
 
     // Get ready for problems.
-    $docLinkInstall = "http://wiki.civicrm.org/confluence/display/CRMDOC/Drupal+Installation+Guide";
-    $docLinkTrouble = "http://wiki.civicrm.org/confluence/display/CRMDOC/Installation+and+Configuration+Trouble-shooting";
-    $forumLink = "http://forum.civicrm.org/index.php/board,6.0.html";
+    $docLinkInstall = "https://docs.civicrm.org/installation/en/latest/drupal8/";
+    $docLinkTrouble = "https://docs.civicrm.org/installation/en/latest/general/troubleshooting/";
+    $seLink = "https://civicrm.stackexchange.com";
 
-    $errorMsgAdd = t("Please review the <a href='!1'>Drupal Installation Guide</a> and the <a href='!2'>Trouble-shooting page</a> for assistance. If you still need help installing, you can often find solutions to your issue by searching for the error message in the <a href='!3'>installation support section of the community forum</a>.</strong></p>",
-      ['!1' => $docLinkInstall, '!2' => $docLinkTrouble, '!3' => $forumLink]
+    $errorMsgAdd = t("Please review the <a href='!1'>Drupal 8 Installation Guide</a> and the <a href='!2'>Trouble-shooting page</a> for assistance. If you still need help installing, you can often find solutions to your issue by searching for the error message on <a href='!3'>CiviCRM StackExchange</a>.</strong></p>",
+      ['!1' => $docLinkInstall, '!2' => $docLinkTrouble, '!3' => $seLink]
     );
 
     $settingsFile = \Drupal::service('kernel')->getSitePath() . '/civicrm.settings.php';
