@@ -33,8 +33,8 @@ class Civicrm {
     $docLinkTrouble = "https://docs.civicrm.org/installation/en/latest/general/troubleshooting/";
     $seLink = "https://civicrm.stackexchange.com";
 
-    $errorMsgAdd = t("Please review the <a href='!1'>Drupal 8 Installation Guide</a> and the <a href='!2'>Trouble-shooting page</a> for assistance. If you still need help installing, you can often find solutions to your issue by searching for the error message on <a href='!3'>CiviCRM StackExchange</a>.</strong></p>",
-      ['!1' => $docLinkInstall, '!2' => $docLinkTrouble, '!3' => $seLink]
+    $errorMsgAdd = t("Please review the <a href=':1'>Drupal 8 Installation Guide</a> and the <a href=':2'>Trouble-shooting page</a> for assistance. If you still need help installing, you can often find solutions to your issue by searching for the error message on <a href=':3'>CiviCRM StackExchange</a>.</strong></p>",
+      [':1' => $docLinkInstall, ':2' => $docLinkTrouble, ':3' => $seLink]
     );
 
     $settingsFile = \Drupal::service('kernel')->getSitePath() . '/civicrm.settings.php';
@@ -51,9 +51,9 @@ class Civicrm {
     // This does pretty much all of the civicrm initialization.
     $output = include_once 'CRM/Core/Config.php';
     if ($output == FALSE) {
-      $msg = t("The path for including CiviCRM code files is not set properly. Most likely there is an error in the <em>civicrm_root</em> setting in your CiviCRM settings file (!1).",
-          ['!1' => $settingsFile]
-        ) . t("civicrm_root is currently set to: <em>!1</em>.", ['!1' => $civicrm_root]) . $errorMsgAdd;
+      $msg = t("The path for including CiviCRM code files is not set properly. Most likely there is an error in the <em>civicrm_root</em> setting in your CiviCRM settings file (@1).",
+          ['@1' => $settingsFile]
+        ) . t("civicrm_root is currently set to: <em>@1</em>.", ['@1' => $civicrm_root]) . $errorMsgAdd;
       throw new CiviCRMConfigException($msg);
     }
 
