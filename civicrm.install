@@ -39,13 +39,13 @@ function civicrm_requirements($phase) {
     $requirements = [];
 
     // Check we have a functioning civicrm instance.
-    $civicrm =  \Drupal::service('civicrm');
+    $civicrm = \Drupal::service('civicrm');
     $civicrm->initialize();
     if (!$civicrm->isInitialized()) {
-      $requirements['civicrm.intialized'] = [
-      'title' => 'CiviCRM Initialized',
-      'severity' => REQUIREMENT_ERROR,
-      'description' => t('Civicrm failed to Initialize. For further information see the <a href=":url">install guide</a>', [':url' => 'https://docs.civicrm.org/installation/en/latest/drupal8/']),
+      $requirements['civicrm.initialized'] = [
+        'title' => 'CiviCRM Initialized',
+        'severity' => REQUIREMENT_ERROR,
+        'description' => 'CiviCRM failed to Initialize. For further information see the <a href="https://docs.civicrm.org/installation/en/latest/drupal8/">install guide</a>',
       ];
       return $requirements;
     }
@@ -53,11 +53,11 @@ function civicrm_requirements($phase) {
     // Civicrm Initialize ran.
     // Check that civicrm.settings.php is not writable.
 
-    if (is_writable(CIVICRM_SETTINGS_PATH)){
+    if (is_writable(CIVICRM_SETTINGS_PATH)) {
       $requirements['civicrm.settingsfile'] = [
-      'title' => 'CiviCRM Settings File writeable',
-      'severity' => REQUIREMENT_WARNING,
-      'description' => t('civicrm.settings.php should not be writable. Please check the
+        'title' => 'CiviCRM Settings File writeable',
+        'severity' => REQUIREMENT_WARNING,
+        'description' => t('civicrm.settings.php should not be writable. Please check the
 permissions on this file. For more information see <a href=":url">install guide</a>', [':url' => 'https://docs.civicrm.org/installation/en/latest/drupal8/']),
       ];
     }
