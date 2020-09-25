@@ -37,7 +37,7 @@ class LocalTasks extends DeriverBase implements ContainerDeriverInterface {
     foreach ($uf_groups as $key => $uf_group) {
       if ($uf_group['is_active']) {
         $this->derivatives["civicrm.{$key}"] = $base_plugin_definition;
-        $this->derivatives["civicrm.{$key}"]['title'] = $uf_group['title'];
+        $this->derivatives["civicrm.{$key}"]['title'] = $uf_group['frontend_title'];
         $this->derivatives["civicrm.{$key}"]['route_parameters'] = ['profile' => $key];
       }
     }
