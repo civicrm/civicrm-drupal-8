@@ -84,7 +84,10 @@ class UserProfile extends FormBase {
     // Grab the form html.
     $this->contactId = \CRM_Core_BAO_UFMatch::getContactId($user->id());
     $html = \CRM_Core_BAO_UFGroup::getEditHTML($this->contactId, $this->ufGroup['title']);
-
+    \CRM_Core_Resources::singleton()->addCoreResources('form-bottom');
+    $html .= \CRM_Core_Region::instance('form-bottom')->render('', FALSE);
+    \CRM_Core_Resources::singleton()->addCoreResources();
+ 
     $form['#title'] = $this->user->getUsername();
     $form['form'] = [
       '#type' => 'fieldset',
