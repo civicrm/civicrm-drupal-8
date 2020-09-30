@@ -85,7 +85,7 @@ class UserProfile extends FormBase {
     $this->contactId = \CRM_Core_BAO_UFMatch::getContactId($user->id());
     $html = \CRM_Core_BAO_UFGroup::getEditHTML($this->contactId, $this->ufGroup['title']);
 
-    $form['#title'] = $this->user->getUsername();
+    $form['#title'] = $this->user->getAccountName();
     $form['form'] = [
       '#type' => 'fieldset',
       '#title' => $this->ufGroup['title'],
