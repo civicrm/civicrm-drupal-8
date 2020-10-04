@@ -58,6 +58,7 @@ class CivicrmBreadcrumbBuilder implements BreadcrumbBuilderInterface {
    */
   public function build(RouteMatchInterface $route_match) {
     $breadcrumb = new Breadcrumb();
+    $breadcrumb->addCacheContexts(['url']);
     $breadcrumb->addLink(Link::createFromRoute($this->t('Home'), '<front>'));
 
     foreach ($this->civicrmPageState->getBreadcrumbs() as $name => $url) {
