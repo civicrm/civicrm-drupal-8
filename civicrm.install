@@ -8,6 +8,8 @@
 use Drupal\Core\Database\Database;
 
 /**
+ * Implements hook_install().
+ *
  * Contains things that need to be installed when the module is installed.
  */
 function civicrm_install() {
@@ -22,11 +24,23 @@ function civicrm_install() {
 
   $installed = $setup->checkInstalled();
   if ($installed->isSettingInstalled() || $installed->isDatabaseInstalled()) {
-    drupal_set_message(t("CiviCRM appears to have already been installed. Skipping full installation."));
+    \Drupal::messenger()
+      ->addMessage(t("CiviCRM appears to have already been installed. Skipping full installation."));
   }
 
   $setup->installFiles();
   $setup->installDatabase();
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function civicrm_uninstall() {
+  /** @var \Civi\Setup $setup */
+  $setup = _civicrm_setup();
+
+  $setup->uninstallFiles();
+  $setup->uninstallDatabase();
 }
 
 /**
