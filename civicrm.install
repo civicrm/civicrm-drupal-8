@@ -113,7 +113,7 @@ function _civicrm_setup() {
   // FIXME: Move more of this to plugins/init/Drupal8.civi-setup.php.
   $civicrm_db = _civicrm_get_db_config()['info'];
   $setup->getModel()->db = [
-    'server' => \Civi\Setup\DbUtil::encodeHostPort($civicrm_db['host'], $civicrm_db['port'] ?: NULL),
+    'server' => \Civi\Setup\DbUtil::encodeHostPort($civicrm_db['host'], $civicrm_db['port'] ?? NULL),
     'username' => $civicrm_db['username'],
     'password' => $civicrm_db['password'],
     'database' => $civicrm_db['database'],
