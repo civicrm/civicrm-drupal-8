@@ -33,8 +33,6 @@ class CivicrmBlock extends BlockBase implements ContainerFactoryPluginInterface 
    *   The plugin implementation definition.
    */
   public function __construct(Civicrm $civicrm, array $configuration, $plugin_id, $plugin_definition) {
-    // Mark all CiviCRM blocks as uncachable.
-    $configuration['cache']['max_age'] = 0;
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $civicrm->initialize();
   }
@@ -62,6 +60,7 @@ class CivicrmBlock extends BlockBase implements ContainerFactoryPluginInterface 
     if ($content) {
       return [
         '#markup' => Markup::create($content),
+        '#cache' => ['max-age' => 0],
       ];
     }
     return [];
