@@ -85,7 +85,7 @@ if (!defined('CIVICRM_CONTAINER_CACHE')) {
   define('CIVICRM_CONTAINER_CACHE', 'never');
 }
 if (!defined('CIVICRM_TEST')) {
-  define('CIVICRM_TEST', 'never');
+  define('CIVICRM_TEST', 1);
 }
 
 CONSTANTS;
