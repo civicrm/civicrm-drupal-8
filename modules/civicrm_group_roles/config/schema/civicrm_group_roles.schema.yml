@@ -1,0 +1,20 @@
+civicrm_group_roles.settings:
+  type: config_entity
+  label: 'CiviGroup Roles Sync settings'
+  mapping:
+    debugging:
+      type: sequence
+      label: 'Enable detailed database logging'
+
+civicrm_group_roles.civicrm_group_role_rule.*:
+  type: config_entity
+  label: 'Civicrm group role rule config'
+  mapping:
+    id:
+      type: string
+      label: 'ID'
+    label:
+      type: label
+      label: 'Label'
+    uuid:
+      type: string

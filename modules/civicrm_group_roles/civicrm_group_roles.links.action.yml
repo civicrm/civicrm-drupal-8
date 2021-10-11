@@ -1,0 +1,5 @@
+entity.civicrm_group_role_rule.add_form:
+  route_name: entity.civicrm_group_role_rule.add_form
+  title: 'Add Association Rule'
+  appears_on:
+    - entity.civicrm_group_role_rule.collection

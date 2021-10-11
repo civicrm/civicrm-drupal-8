@@ -1,0 +1,7 @@
+services:
+  civicrm_group_roles:
+    class: \Drupal\civicrm_group_roles\CivicrmGroupRoles
+    arguments: ['@civicrm', '@config.factory', '@entity_type.manager']
+  civicrm_group_roles.batch.sync:
+    class: \Drupal\civicrm_group_roles\Batch\Sync
+    arguments: ['@string_translation', '@messenger']
