@@ -344,6 +344,40 @@ function civicrm_theme() {
 }
 
 /**
+ * Implements hook_preprocess_html().
+ */
+function civicrm_preprocess_html(array &$variables) {
+  // Get current route name and CiviCRM args parameter.
+  $name = \Drupal::routeMatch()->getRouteName();
+  $args = \Drupal::routeMatch()->getParameter('args');
+
+  // Get module from route name.
+  $segments = explode('.', $name);
+  $module = $segments[0];
+
+  // Is this a CiviCRM route and are arguments given?
+  if (($module == 'civicrm') && $args) {
+
+    // Since the body class of a sub-page inherits the args of its
+    // parent page(s) a prefix is initiated.
+    $prefix = '';
+
+    // Generate classes from arguments.
+    foreach ($args as &$arg) {
+      $page = (empty($prefix) ? $arg : $prefix . '-' . $arg);
+      $class = 'page-' . $page;
+
+      // Add body class to variables.
+      $variables['attributes']['class'][] = $class;
+
+      // Update prefix.
+      $prefix = $page;
+    }
+  }
+}
+
+
+/**
  * Prepares variables for civicrm_contact templates.
  *
  * Default template: civicrm-contact.html.twig.
