@@ -154,7 +154,7 @@ function _civicrm_find_civicrm() {
 
   $possible_paths = [];
 
-  if ($path = drupal_get_path('module', 'civicrm')) {
+  if ($path = \Drupal::service('extension.list.module')->getPath('civicrm')) {
     $possible_paths[] = $path;
   }
   $possible_paths[] = 'vendor/civicrm/civicrm-core';
