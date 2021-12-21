@@ -29,12 +29,12 @@ class Civicrm {
     }
 
     // Get ready for problems.
-    $docLinkInstall = "http://wiki.civicrm.org/confluence/display/CRMDOC/Drupal+Installation+Guide";
-    $docLinkTrouble = "http://wiki.civicrm.org/confluence/display/CRMDOC/Installation+and+Configuration+Trouble-shooting";
-    $forumLink = "http://forum.civicrm.org/index.php/board,6.0.html";
+    $docLinkInstall = "https://docs.civicrm.org/installation/en/latest/drupal8/";
+    $docLinkTrouble = "https://docs.civicrm.org/installation/en/latest/general/troubleshooting/";
+    $seLink = "https://civicrm.stackexchange.com";
 
-    $errorMsgAdd = t("Please review the <a href='!1'>Drupal Installation Guide</a> and the <a href='!2'>Trouble-shooting page</a> for assistance. If you still need help installing, you can often find solutions to your issue by searching for the error message in the <a href='!3'>installation support section of the community forum</a>.</strong></p>",
-      ['!1' => $docLinkInstall, '!2' => $docLinkTrouble, '!3' => $forumLink]
+    $errorMsgAdd = t("Please review the <a href=':1'>Drupal 8 Installation Guide</a> and the <a href=':2'>Trouble-shooting page</a> for assistance. If you still need help installing, you can often find solutions to your issue by searching for the error message on <a href=':3'>CiviCRM StackExchange</a>.</strong></p>",
+      [':1' => $docLinkInstall, ':2' => $docLinkTrouble, ':3' => $seLink]
     );
 
     $settingsFile = \Drupal::service('kernel')->getSitePath() . '/civicrm.settings.php';
@@ -51,9 +51,9 @@ class Civicrm {
     // This does pretty much all of the civicrm initialization.
     $output = include_once 'CRM/Core/Config.php';
     if ($output == FALSE) {
-      $msg = t("The path for including CiviCRM code files is not set properly. Most likely there is an error in the <em>civicrm_root</em> setting in your CiviCRM settings file (!1).",
-          ['!1' => $settingsFile]
-        ) . t("civicrm_root is currently set to: <em>!1</em>.", ['!1' => $civicrm_root]) . $errorMsgAdd;
+      $msg = t("The path for including CiviCRM code files is not set properly. Most likely there is an error in the <em>civicrm_root</em> setting in your CiviCRM settings file (@1).",
+          ['@1' => $settingsFile]
+        ) . t("civicrm_root is currently set to: <em>@1</em>.", ['@1' => $civicrm_root]) . $errorMsgAdd;
       throw new CiviCRMConfigException($msg);
     }
 
