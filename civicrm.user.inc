@@ -36,7 +36,7 @@ function civicrm_user_insert(AccountInterface $account) {
   $userSystem = CRM_Core_Config::singleton()->userSystem;
   $userSystemID = $userSystem->getBestUFID($account);
   $uniqId = $userSystem->getBestUFUniqueIdentifier($account);
-  \CRM_Core_BAO_UFMatch::synchronizeUFMatch($user, $userSystemID, $uniqId, 'Drupal', NULL, 'Individual', $isLogin = FALSE);
+  \CRM_Core_BAO_UFMatch::synchronizeUFMatch($account, $userSystemID, $uniqId, 'Drupal8', NULL, 'Individual', $isLogin = FALSE);
 
   // As per CRM-7858, the email address in CiviCRM isn't always set
   // with a call to synchronize(). So we force this through.
