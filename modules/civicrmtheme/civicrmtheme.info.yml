@@ -2,6 +2,6 @@ name: CiviCRM Theme
 type: module
 description: 'Define alternate themes for CiviCRM.'
 package: CiviCRM
-core_version_requirement: ^8.7.7 || ^9
+core_version_requirement: ^9 || ^10
 dependencies:
  - civicrm
