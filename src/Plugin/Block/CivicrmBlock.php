@@ -54,12 +54,12 @@ class CivicrmBlock extends BlockBase implements ContainerFactoryPluginInterface 
    */
   public function build() {
     $block_id = $this->getDerivativeId();
-    $content = \CRM_Core_Block::getContent($block_id)['content'];
+    $block = \CRM_Core_Block::getContent($block_id);
 
     // Bypass Drupal SafeString escaping by setting output as already escaped.
-    if ($content) {
+    if (!empty($block['content'])) {
       return [
-        '#markup' => Markup::create($content),
+        '#markup' => Markup::create($block['content']),
         '#cache' => ['max-age' => 0],
       ];
     }
