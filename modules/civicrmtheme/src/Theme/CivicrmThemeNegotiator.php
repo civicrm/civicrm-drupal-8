@@ -67,10 +67,6 @@ class CivicrmThemeNegotiator implements ThemeNegotiatorInterface {
       return FALSE;
     }
 
-    if (count($parts) > 1 && $parts[1] == 'upgrade') {
-      return FALSE;
-    }
-
     $config = $this->configFactory->get('civicrmtheme.settings');
     $admin_theme = $config->get('admin_theme');
     $public_theme = $config->get('public_theme');
