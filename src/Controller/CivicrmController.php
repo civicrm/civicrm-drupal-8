@@ -56,6 +56,7 @@ class CivicrmController extends ControllerBase {
    * Main controller, passes trough to CiviCRM.
    */
   public function main($args, $extra) {
+    $args = explode('/', $args);
     if ($extra) {
       $args = array_merge($args, explode(':', $extra));
     }

@@ -349,7 +349,7 @@ function civicrm_theme() {
 function civicrm_preprocess_html(array &$variables) {
   // Get current route name and CiviCRM args parameter.
   $name = \Drupal::routeMatch()->getRouteName();
-  $args = \Drupal::routeMatch()->getParameter('args');
+  $args = explode('/', \Drupal::routeMatch()->getParameter('args'));
 
   // Get module from route name.
   $segments = explode('.', $name);
