@@ -56,6 +56,9 @@ class CivicrmController extends ControllerBase {
    * Main controller, passes trough to CiviCRM.
    */
   public function main($args, $extra) {
+    // $args should usually be a `string`, but (when upgrading, e.g. from 5.61.0) it may be `array`.
+    $args = is_array($args) ? $args : explode('/', $args);
+
     if ($extra) {
       $args = array_merge($args, explode(':', $extra));
     }
