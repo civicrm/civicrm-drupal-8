@@ -33,7 +33,7 @@ class Routes {
         [
           '_title' => isset($item['title']) ? $item['title'] : 'CiviCRM',
           '_controller' => 'Drupal\civicrm\Controller\CivicrmController::main',
-          'args' => explode('/', $path),
+          'args' => $path,
           'extra' => '',
         ],
         [
