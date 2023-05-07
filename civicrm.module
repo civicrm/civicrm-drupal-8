@@ -350,7 +350,6 @@ function civicrm_preprocess_html(array &$variables) {
   // Get current route name and CiviCRM args parameter.
   $name = \Drupal::routeMatch()->getRouteName();
   $args = \Drupal::routeMatch()->getParameter('args');
-  $args = is_array($args) ? $args : explode('/', $args);
 
   // Get module from route name.
   $segments = explode('.', $name);
@@ -358,6 +357,7 @@ function civicrm_preprocess_html(array &$variables) {
 
   // Is this a CiviCRM route and are arguments given?
   if (($module == 'civicrm') && $args) {
+    $args = is_array($args) ? $args : explode('/', $args);
 
     // Since the body class of a sub-page inherits the args of its
     // parent page(s) a prefix is initiated.
