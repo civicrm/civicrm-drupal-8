@@ -1,0 +1,15 @@
+civicrm_group_roles.admin_config_civicrm.civicrm_group_roles_configure:
+  path: '/admin/config/civicrm/civicrm-group-roles/configure'
+  defaults:
+    _form: '\Drupal\civicrm_group_roles\Form\SettingsForm'
+    _title: 'CiviGroup Roles Sync'
+  requirements:
+    _permission: 'access civicrm group role setting'
+
+civicrm_group_roles.admin_config_civicrm.civicrm_group_roles_manual_sync:
+  path: '/admin/config/civicrm/civicrm-group-roles/manual-sync'
+  defaults:
+    _form: '\Drupal\civicrm_group_roles\Form\ManualSyncForm'
+    _title: 'CiviGroup Roles Sync'
+  requirements:
+    _permission: 'access civicrm group role setting'

@@ -1,0 +1,32 @@
+<?php
+
+/**
+ * @file
+ * CiviGroup Roles Sync module code.
+ */
+
+use Drupal\Core\Session\AccountInterface;
+
+/**
+ * Implements hook_user_login().
+ */
+function civicrm_group_roles_user_login(AccountInterface $account) {
+  /** @var \Drupal\civicrm_group_roles\CivicrmGroupRoles $civicrm_group_roles */
+  $civicrm_group_roles = \Drupal::service('civicrm_group_roles');
+  $civicrm_group_roles->syncUser($account);
+}
+
+/**
+ * Implements hook_user_insert().
+ *
+ * When a new user is created, add them to Civi groups depending on their
+ * assigned roles.
+ */
+function civicrm_group_roles_user_insert($account) {
+  $roles = $account->getRoles();
+  if ($roles) {
+    /** @var \Drupal\civicrm_group_roles\CivicrmGroupRoles $civicrm_group_roles */
+    $civicrm_group_roles = \Drupal::service('civicrm_group_roles');
+    $civicrm_group_roles->addGroupsOnCreate($account, $roles);
+  }
+}

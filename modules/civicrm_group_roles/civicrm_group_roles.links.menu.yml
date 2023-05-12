@@ -1,0 +1,5 @@
+civicrm_group_roles.admin_config_civicrm.civicrm_group_roles:
+  route_name: entity.civicrm_group_role_rule.collection
+  parent: civicrm.admin_config_civicrm
+  title: 'CiviGroup Roles Sync'
+  description: 'Add/remove association rules and configure settings. Also perform manual synchronization.'

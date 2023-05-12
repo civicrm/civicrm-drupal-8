@@ -1,0 +1,15 @@
+civicrm_group_roles.admin_config_civicrm.civicrm_group_roles:
+  route_name: entity.civicrm_group_role_rule.collection
+  title: 'List Association Rule(s)'
+  base_route: entity.civicrm_group_role_rule.collection
+  weight: -5
+
+civicrm_group_roles.admin_config_civicrm.civicrm_group_roles_configure:
+  route_name: civicrm_group_roles.admin_config_civicrm.civicrm_group_roles_configure
+  title: 'Configure'
+  base_route: entity.civicrm_group_role_rule.collection
+
+civicrm_group_roles.admin_config_civicrm.civicrm_group_roles_manual_sync:
+  route_name: civicrm_group_roles.admin_config_civicrm.civicrm_group_roles_manual_sync
+  title: 'Manually Synchronize'
+  base_route: entity.civicrm_group_role_rule.collection
