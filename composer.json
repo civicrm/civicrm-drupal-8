@@ -28,7 +28,7 @@
   "require": {
     "composer/installers": "^1 || ^2",
     "civicrm/civicrm-asset-plugin": "~1.1",
-    "civicrm/civicrm-core" : ">=5.21.0"
+    "civicrm/civicrm-core" : ">=5.21.0 || dev-master"
   },
   "extra": {
     "installer-name": "civicrm"
