@@ -42,7 +42,7 @@ class CivicrmPermissions implements ContainerInjectionInterface {
       $permissions[$permission] = ['title' => $title];
 
       $description = array_shift($attr);
-      if (!empty($description) && !is_array($description) {
+      if (!empty($description) && !is_array($description)) {
         $permissions[$permission]['description'] = $description;
       }
     }
