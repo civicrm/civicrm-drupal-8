@@ -38,12 +38,10 @@ class CivicrmPermissions implements ContainerInjectionInterface {
   public function permissions() {
     $permissions = [];
     foreach (\CRM_Core_Permission::basicPermissions(FALSE, TRUE) as $permission => $attr) {
-      $title = array_shift($attr);
-      $permissions[$permission] = ['title' => $title];
+      $permissions[$permission] = ['title' => $attr['label']];
 
-      $description = array_shift($attr);
-      if (!empty($description) && !is_array($description)) {
-        $permissions[$permission]['description'] = $description;
+      if (!empty($attr['description'])) {
+        $permissions[$permission]['description'] = $attr['description'];
       }
     }
     return $permissions;
