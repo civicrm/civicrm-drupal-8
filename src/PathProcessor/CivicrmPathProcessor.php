@@ -25,12 +25,12 @@ class CivicrmPathProcessor implements InboundPathProcessorInterface {
       $longest = '';
       foreach (array_keys($items) as $item) {
         $item = '/' . $item;
-        // If he current path is a civicrm path.
-        if ((strpos($path, $item) === 0)) {
-          // Discover longest matching civicrm path in the request path.
-          if (strlen($item) > strlen($longest)) {
-            $longest = $item;
-          }
+        if ($path === $item) {
+          $longest = $item;
+          break;
+        }
+        if (str_starts_with($path, "$item/") && strlen($item) > strlen($longest)) {
+          $longest = $item;
         }
       }
       if (!empty($longest)) {
