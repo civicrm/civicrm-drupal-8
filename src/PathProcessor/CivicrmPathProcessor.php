@@ -29,10 +29,10 @@ class CivicrmPathProcessor implements InboundPathProcessorInterface {
       $civicrm = new Civicrm();
       $civicrm->initialize();
       // Fetch civicrm menu items.
-      $items = \Civi::cache('long')->get(__CLASS__ . '-Core_Menu_items');
+      $items = \Civi::cache('long')->get('CivicrmPathProcessor-Core_Menu_items');
       if (empty($items)) {
         $items = \CRM_Core_Menu::items();
-        \Civi::cache('long')->set(__CLASS__ . '-Core_Menu_items', $items);
+        \Civi::cache('long')->set('CivicrmPathProcessor-Core_Menu_items', $items);
       }
       \Civi::$statics[__CLASS__]['knownPaths'][$path] = $path;
       $longest = '';
