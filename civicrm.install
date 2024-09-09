@@ -88,14 +88,16 @@ function civicrm_requirements($phase) {
     'other' => 'CiviCRM: Other',
   ];
 
-  foreach ($setup->checkRequirements()->getMessages() as $msg) {
-    $section = isset($sections[$msg['section']]) ? $sections[$msg['section']] : $sections['other'];
-    $key = 'civicrm.' . $msg['section'] . '.' . $msg['name'];
-    $requirements[$key] = [
-      'title' => $section . ': ' . $msg['message'],
-      'description' => $section . ': ' . $msg['message'],
-      'severity' => $severityMap[$msg['severity']],
-    ];
+  if ($phase !== 'runtime') {
+    foreach ($setup->checkRequirements()->getMessages() as $msg) {
+      $section = isset($sections[$msg['section']]) ? $sections[$msg['section']] : $sections['other'];
+      $key = 'civicrm.' . $msg['section'] . '.' . $msg['name'];
+      $requirements[$key] = [
+        'title' => $section . ': ' . $msg['message'],
+        'description' => $section . ': ' . $msg['message'],
+        'severity' => $severityMap[$msg['severity']],
+      ];
+    }
   }
 
   ksort($requirements);
