@@ -3,7 +3,6 @@
 namespace Drupal\civicrm;
 
 use Drupal\civicrm\Exception\CiviCRMConfigException;
-use Drupal\Core\Config\ConfigException;
 use Drupal\Core\Session\AccountInterface;
 
 /**
