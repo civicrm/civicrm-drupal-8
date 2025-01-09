@@ -31,7 +31,6 @@ class CivicrmBreadcrumbBuilder implements BreadcrumbBuilderInterface {
   /**
    * {@inheritdoc}
    */
-  // public function applies(RouteMatchInterface $route_match) {
   public function applies(RouteMatchInterface $route_match, ?CacheableMetadata $cacheable_metadata = NULL) {
     $route_object = $route_match->getRouteObject();
 
@@ -40,7 +39,7 @@ class CivicrmBreadcrumbBuilder implements BreadcrumbBuilderInterface {
     if ($cacheable_metadata) {
       $cacheable_metadata->addCacheContexts(['route']);
     }
-    
+
     // No route object is defined, so we can't inspect it.
     if (!$route_object) {
       return FALSE;
