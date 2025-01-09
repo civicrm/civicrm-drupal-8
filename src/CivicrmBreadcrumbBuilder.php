@@ -37,7 +37,9 @@ class CivicrmBreadcrumbBuilder implements BreadcrumbBuilderInterface {
 
     // @todo Remove in Drupal 12.0.0, will be added from ::applies(). See
     //   https://www.drupal.org/project/drupal/issues/3459277
-    $route_object->addCacheContexts(['route']);
+    if ($cacheable_metadata) {
+      $cacheable_metadata->addCacheContexts(['route']);
+    }
     
     // No route object is defined, so we can't inspect it.
     if (!$route_object) {
