@@ -5,8 +5,6 @@
  * Contains install-time code for the CiviCRM module.
  */
 
-use Drupal\Core\Database\Database;
-
 /**
  * Implements hook_install().
  *
@@ -123,18 +121,7 @@ function _civicrm_setup() {
     'srcPath' => $civicrm_base,
   ]);
 
-  $setup = Civi\Setup::instance();
-
-  // FIXME: Move more of this to plugins/init/Drupal8.civi-setup.php.
-  $civicrm_db = _civicrm_get_db_config()['info'];
-  $setup->getModel()->db = [
-    'server' => \Civi\Setup\DbUtil::encodeHostPort($civicrm_db['host'], $civicrm_db['port'] ?? NULL),
-    'username' => $civicrm_db['username'],
-    'password' => $civicrm_db['password'],
-    'database' => $civicrm_db['database'],
-  ];
-
-  return $setup;
+  return Civi\Setup::instance();
 }
 
 /**
@@ -169,41 +156,4 @@ function _civicrm_find_civicrm() {
   }
 
   return NULL;
-}
-
-/**
- * Attempt to use a 'civicrm' labelled database connection if one exists.
- *
- * Otherwise default to using the same connection used by drupal.
- * Also handle the special case where this is running as a test.
- *
- * @return string[]
- *   An array of what database-config to use.
- */
-function _civicrm_get_db_config() {
-  if (drupal_valid_test_ua()) {
-    $config = Database::getConnectionInfo('civicrm_test');
-    if ($config) {
-      return [
-        'key' => 'civicrm_test',
-        'info' => $config['default'],
-      ];
-    }
-    else {
-      throw new \RuntimeException("No civicrm_test database provided");
-    }
-  }
-
-  if ($config = Database::getConnectionInfo('civicrm')) {
-    return [
-      'key' => 'civicrm',
-      'info' => $config['default'],
-    ];
-  }
-  else {
-    return [
-      'key' => 'default',
-      'info' => Database::getConnectionInfo('default')['default'],
-    ];
-  }
 }
