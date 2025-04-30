@@ -285,6 +285,13 @@ function civicrm_form_user_register_form_alter(&$form, &$form_state, $form_id) {
   civicrm_key_disable();
   $html = \CRM_Core_BAO_UFGroup::getEditHTML(NULL, '', NULL, TRUE, TRUE, NULL, FALSE, $civicrm->getCtype());
 
+  if (str_contains($html, 'type="file"')) {
+    // If Drupal doesn't set the enctype, CiviCRM will not be able to upload
+    // the file. Drupal only add this if the form has a file upload field. it
+    // does not look at the civicrm elements.
+    $form['#attributes']['enctype'] = 'multipart/form-data';
+  }
+
   // Need to disable the page cache.
   \Drupal::service('page_cache_kill_switch')->trigger();
 
