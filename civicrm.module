@@ -12,8 +12,6 @@ use Drupal\Core\Url;
 use Symfony\Component\Routing\Route;
 use Drupal\Core\Render\Markup;
 
-define('CIVICRM_UF_HEAD', TRUE);
-
 require_once 'civicrm.user.inc';
 
 /**
