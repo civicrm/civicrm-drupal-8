@@ -383,7 +383,6 @@ function civicrm_preprocess_html(array &$variables) {
   }
 }
 
-
 /**
  * Prepares variables for civicrm_contact templates.
  *
