@@ -89,7 +89,7 @@ class UserProfile extends FormBase {
     $html .= \CRM_Core_Region::instance('form-bottom')->render('', FALSE);
     \CRM_Core_Resources::singleton()->addCoreResources();
 
-    $form['#title'] = $this->user->getAccountName();
+    $form['#title'] = $this->user->getDisplayName();
     $form['#attributes'] = ['enctype' => "multipart/form-data"];
     $form['form'] = [
       '#type' => 'fieldset',
