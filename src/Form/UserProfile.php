@@ -25,17 +25,12 @@ class UserProfile extends FormBase {
   protected $user;
 
   /**
-   *
-   */
-  protected $profile;
-
-  /**
-   *
+   * @var int
    */
   protected $contactId;
 
   /**
-   *
+   * @var array
    */
   protected $ufGroup;
 
@@ -72,7 +67,6 @@ class UserProfile extends FormBase {
     // Make the controller state available to form overrides.
     $form_state->set('controller', $this);
     $this->user = $user;
-    $this->profile = $profile;
 
     // Search for the profile form, otherwise generate a 404.
     $uf_groups = \CRM_Core_BAO_UFGroup::getModuleUFGroup('User Account');
