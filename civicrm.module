@@ -31,13 +31,13 @@ function civicrm_page_attachments(array &$page) {
   // Always add core styles (even if not on a /civicrm page).
   CRM_Core_Resources::singleton()->addCoreStyles();
 
-  // Merge CiviCRM stuff into HTML header.
-  if ($region = \CRM_Core_Region::instance('html-header', FALSE)) {
-    \CRM_Utils_System::addHTMLHead($region->render(''));
-  }
-
   /** @var \Drupal\civicrm\CivicrmPageState $page_state */
   $page_state = \Drupal::service('civicrm.page_state');
+
+  // Merge CiviCRM stuff into HTML header.
+  if ($region = \CRM_Core_Region::instance('html-header', FALSE)) {
+    $page_state->addHtmlHeader($region->render(''));
+  }
 
   // Attach CSS and JS.
   foreach ($page_state->getCSS() as $counter => $css) {
