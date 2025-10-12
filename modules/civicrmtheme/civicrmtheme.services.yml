@@ -3,4 +3,4 @@ services:
     class: Drupal\civicrmtheme\Theme\CivicrmThemeNegotiator
     arguments: ['@current_user', '@config.factory', '@civicrm']
     tags:
-      - { name: theme_negotiator, priority: 0 }
+      - { name: theme_negotiator, priority: 11 }
