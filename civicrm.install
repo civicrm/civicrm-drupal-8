@@ -21,11 +21,15 @@ function civicrm_install() {
   }
 
   $installed = $setup->checkInstalled();
-  if ($installed->isSettingInstalled() || $installed->isDatabaseInstalled()) {
-    throw new \Exception("CiviCRM appears to have already been installed. Skipping full installation.");
+  if ($installed->isDatabaseInstalled()) {
+     throw new \Exception("CiviCRM appears to have already been installed. Skipping full installation.");
   }
-
-  $setup->installFiles();
+  if ($installed->isSettingInstalled()) {
+    $setup->installFiles(FALSE);
+  }
+  else {
+    $setup->installFiles();
+  }
   $setup->installDatabase();
 }
 
