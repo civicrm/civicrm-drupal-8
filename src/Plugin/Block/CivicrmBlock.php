@@ -35,6 +35,7 @@ class CivicrmBlock extends BlockBase implements ContainerFactoryPluginInterface 
   public function __construct(Civicrm $civicrm, array $configuration, $plugin_id, $plugin_definition) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $civicrm->initialize();
+    \CRM_Core_Resources::singleton()->addCoreResources();
   }
 
   /**

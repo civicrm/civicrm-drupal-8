@@ -3,7 +3,6 @@
 namespace Drupal\civicrm;
 
 use Drupal\civicrm\Exception\CiviCRMConfigException;
-use Drupal\Core\Config\ConfigException;
 use Drupal\Core\Session\AccountInterface;
 
 /**
@@ -16,7 +15,7 @@ class Civicrm {
    *
    * @var bool
    */
-  protected $initialized = FALSE;
+  protected static $initialized = FALSE;
 
   /**
    * Initialize CiviCRM.
@@ -24,7 +23,7 @@ class Civicrm {
    * Call this function from other modules too if they use the CiviCRM API.
    */
   public function initialize() {
-    if ($this->initialized) {
+    if ($this->isInitialized()) {
       return;
     }
 
@@ -61,14 +60,14 @@ class Civicrm {
     \CRM_Core_Config::singleton()->userSystem->setMySQLTimeZone();
 
     // Mark CiviCRM as initialized.
-    $this->initialized = TRUE;
+    static::$initialized = TRUE;
   }
 
   /**
    * Checks if the CiviCRM link is already initialized.
    */
   public function isInitialized() {
-    return $this->initialized;
+    return static::$initialized;
   }
 
   /**
@@ -78,7 +77,7 @@ class Civicrm {
    */
   public function invoke($args) {
     $this->initialize();
-    
+
     // Add CSS, JS, etc. that is required for this page.
     \CRM_Core_Resources::singleton()->addCoreResources();
 
