@@ -55,6 +55,10 @@ function civicrm_page_attachments(array &$page) {
     '#markup' => Markup::create($headers),
   ];
   $page['#attached']['html_head'][] = [$markup, 'civicrm-headers'];
+
+  // if we load CiviCRM content on a page, we add a general cache tag
+  // so we can invalidate Drupal's cache when CiviCRM is flushed
+  $page['#cache']['tags'][] = 'civicrm';
 }
 
 /**
