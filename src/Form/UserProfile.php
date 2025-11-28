@@ -130,10 +130,11 @@ class UserProfile extends FormBase {
   /**
    * Controls access for this form.
    */
-  public function access($profile) {
+  public function access($profile, $user) {
     $uf_groups = \CRM_Core_BAO_UFGroup::getModuleUFGroup('User Account', 0, FALSE, \CRM_Core_Permission::EDIT);
+    $cid = \CRM_Core_BAO_UFMatch::getContactId($user);
 
-    if (isset($uf_groups[$profile])) {
+    if (isset($uf_groups[$profile]) && isset($cid) && \CRM_Contact_BAO_Contact_Permission::allow($cid, \CRM_Core_Permission::EDIT)) {
       return AccessResult::allowed();
     }
     return AccessResult::forbidden();
