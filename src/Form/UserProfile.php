@@ -63,17 +63,17 @@ class UserProfile extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, AccountInterface $user = NULL, $profile = NULL) {
+  public function buildForm(array $form, FormStateInterface $form_state, ?AccountInterface $user = NULL, $profile = NULL) {
     // Make the controller state available to form overrides.
     $form_state->set('controller', $this);
     $this->user = $user;
 
     // Search for the profile form, otherwise generate a 404.
     $uf_groups = \CRM_Core_BAO_UFGroup::getModuleUFGroup('User Account');
-    if (empty($uf_groups[$profile])) {
+    if (empty($uf_groups[$profile ?? ''])) {
       throw new ResourceNotFoundException();
     }
-    $this->ufGroup = $uf_groups[$profile];
+    $this->ufGroup = $uf_groups[$profile ?? ''];
 
     // Grab the form html.
     $this->contactId = \CRM_Core_BAO_UFMatch::getContactId($user->id());
