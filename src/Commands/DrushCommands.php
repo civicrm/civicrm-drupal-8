@@ -2,7 +2,6 @@
 
 namespace Drupal\civicrm\Commands;
 
-use Consolidation\OutputFormatters\StructuredData\RowsOfFields;
 use Drush\Commands\DrushCommands as BaseDrushCommands;
 use Drush\Exceptions\UserAbortException;
 use Symfony\Component\Process\Exception\ProcessFailedException;
@@ -97,7 +96,6 @@ class DrushCommands extends BaseDrushCommands {
         throw new \InvalidArgumentException(sprintf('Unknown --out format: %s', $outFormat));
     }
   }
-
 
   // ---------------------------------------------------------------------------
   // Cache / flush
@@ -753,7 +751,7 @@ class DrushCommands extends BaseDrushCommands {
    * Build a mysql credential string (flags only, no command name).
    */
   protected function buildMysqlCredStr(array $parsed): string {
-    $cred  = '-u ' . escapeshellarg($parsed['username']);
+    $cred = '-u ' . escapeshellarg($parsed['username']);
     if (!empty($parsed['password'])) {
       $cred .= ' -p' . escapeshellarg($parsed['password']);
     }
@@ -776,7 +774,7 @@ class DrushCommands extends BaseDrushCommands {
    * Build a full "mysqldump …" command string.
    */
   protected function buildMysqldumpCmd(array $parsed): string {
-    $cmd  = 'mysqldump -u ' . escapeshellarg($parsed['username']);
+    $cmd = 'mysqldump -u ' . escapeshellarg($parsed['username']);
     if (!empty($parsed['password'])) {
       $cmd .= ' -p' . escapeshellarg($parsed['password']);
     }
@@ -817,4 +815,3 @@ class DrushCommands extends BaseDrushCommands {
   }
 
 }
-
