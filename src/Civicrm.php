@@ -24,10 +24,30 @@ class Civicrm {
    */
   public function initialize() {
     if ($this->isInitialized()) {
+//      \CRM_Core_Error::debug_log_message("already init'd POST is " . print_r($_POST, TRUE));
       return;
     }
 
+    // This works for cli but this is tricky because take e.g. widgettest. When it makes the actual network call, that's not a test call and there's no way to know if we're here because that url is being called from a test or not. Is there something in the database we could use to know that a test is in progress? Or would such calls need to pass something in the http headers to tell us? But even then the calling test won't have access to the actual error, just the bad response.
+    if (defined('CIVICRM_TEST') && CIVICRM_TEST) {
+      // this is the only way to find out the current handler
+      $old_handler = set_error_handler(function($errno, $errstr, $errfile, $errline) {});
+      restore_error_handler();
+//      \CRM_Core_Error::debug_log_message("old handler is " . print_r($old_handler, TRUE));
+      // Replace drupal's error handler with whatever came before it, usually
+      // null, which will result in phpunit setting its own error handler. If
+      // it's not null then the tests will end up using whatever that was since
+      // phpunit won't overwrite it.
+      if ($old_handler === '_drupal_error_handler') {
+        restore_error_handler();
+//        $new_handler = set_error_handler(function($errno, $errstr, $errfile, $errline) {});
+//        restore_error_handler();
+//        \CRM_Core_Error::debug_log_message("New handler is now " . var_export($new_handler, TRUE));
+      }
+    }
+
     // Get ready for problems.
+    // @todo update these links, but leave above awesome comment.
     $docLinkInstall = "http://wiki.civicrm.org/confluence/display/CRMDOC/Drupal+Installation+Guide";
     $docLinkTrouble = "http://wiki.civicrm.org/confluence/display/CRMDOC/Installation+and+Configuration+Trouble-shooting";
     $forumLink = "http://forum.civicrm.org/index.php/board,6.0.html";
@@ -61,6 +81,7 @@ class Civicrm {
 
     // Mark CiviCRM as initialized.
     static::$initialized = TRUE;
+//  \CRM_Core_Error::debug_log_message("POST is " . print_r($_POST, TRUE));
   }
 
   /**
