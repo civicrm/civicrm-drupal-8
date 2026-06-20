@@ -27,36 +27,14 @@ class Civicrm {
       return;
     }
 
-    // Get ready for problems.
-    $docLinkInstall = "http://wiki.civicrm.org/confluence/display/CRMDOC/Drupal+Installation+Guide";
-    $docLinkTrouble = "http://wiki.civicrm.org/confluence/display/CRMDOC/Installation+and+Configuration+Trouble-shooting";
-    $forumLink = "http://forum.civicrm.org/index.php/board,6.0.html";
-
-    $errorMsgAdd = t("Please review the <a href='!1'>Drupal Installation Guide</a> and the <a href='!2'>Trouble-shooting page</a> for assistance. If you still need help installing, you can often find solutions to your issue by searching for the error message in the <a href='!3'>installation support section of the community forum</a>.</strong></p>",
-      ['!1' => $docLinkInstall, '!2' => $docLinkTrouble, '!3' => $forumLink]
-    );
-
-    $settingsFile = \Drupal::service('kernel')->getSitePath() . '/civicrm.settings.php';
-    if (!defined('CIVICRM_SETTINGS_PATH')) {
-      define('CIVICRM_SETTINGS_PATH', $settingsFile);
-    }
-
-    $output = include_once $settingsFile;
-    if ($output == FALSE) {
-      $msg = t("The CiviCRM settings file (civicrm.settings.php) was not found in the expected location: %location", ['%location' => $settingsFile]) . ' ' . $errorMsgAdd;
-      throw new CiviCRMConfigException($msg);
-    }
-
-    // This does pretty much all of the civicrm initialization.
-    $output = include_once 'CRM/Core/Config.php';
-    if ($output == FALSE) {
-      $msg = t("The path for including CiviCRM code files is not set properly. Most likely there is an error in the <em>civicrm_root</em> setting in your CiviCRM settings file (!1).",
-          ['!1' => $settingsFile]
-        ) . t("civicrm_root is currently set to: <em>!1</em>.", ['!1' => $civicrm_root]) . $errorMsgAdd;
-      throw new CiviCRMConfigException($msg);
-    }
+    $settingsPath = \Drupal::service('kernel')->getSitePath() . '/civicrm.settings.php';
+    \Civi\Core\LegacyClassLoader::register();
+    \Civi\Core\SettingsManager::bootSettings($settingsPath);
 
     // Initialize the system by creating a config object.
+    \CRM_Core_Config::singleton();
+
+    // Set timezone - TODO: can we use a CRM_Util_System hook for this?
     \CRM_Core_Config::singleton()->userSystem->setMySQLTimeZone();
 
     // Mark CiviCRM as initialized.
