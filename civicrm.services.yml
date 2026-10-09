@@ -15,3 +15,15 @@ services:
   civicrm.event_subscriber_registrar:
     class: Drupal\civicrm\EventSubscriberRegistrar
     arguments: ['@service_container', []]
+  civicrm.cache_invalidator:
+    class: Drupal\civicrm\Cache\CivicrmCacheInvalidator
+    arguments:
+      - '@cache_tags.invalidator'
+      - '@plugin.manager.block'
+      - '@plugin.manager.menu.local_task'
+    public: true
+  civicrm.cache_flush_subscriber:
+    class: Drupal\civicrm\EventSubscriber\CacheFlushSubscriber
+    arguments: ['@civicrm.cache_invalidator']
+    tags:
+      - { name: civicrm.event_subscriber }
