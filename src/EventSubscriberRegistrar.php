@@ -2,6 +2,7 @@
 
 namespace Drupal\civicrm;
 
+use Civi\Core\CiviEventDispatcherInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -41,11 +42,16 @@ class EventSubscriberRegistrar {
   protected array $subscriberIds;
 
   /**
-   * Object IDs of dispatchers already populated, keyed for idempotency.
+   * The subscribers attached to each dispatcher, with their container.
    *
-   * @var array
+   * Static, because CiviCRM keeps its dispatcher when Drupal rebuilds its
+   * container, and the rebuilt container has a registrar of its own. A
+   * \WeakMap, because a dispatcher CiviCRM replaces is freed, and PHP can give
+   * the freed object's ID to a later one.
+   *
+   * @var \WeakMap|null
    */
-  protected array $registered = [];
+  protected static ?\WeakMap $dispatchers = NULL;
 
   /**
    * Constructs the registrar.
@@ -64,7 +70,8 @@ class EventSubscriberRegistrar {
    * Attaches all tagged Drupal subscribers to CiviCRM's dispatcher.
    *
    * Safe to call repeatedly: hook_civicrm_config (the trigger) may fire more
-   * than once per process, but each dispatcher instance is populated only once.
+   * than once per process, and from more than one Drupal container, but each
+   * dispatcher holds the subscribers of one container only, once.
    */
   public function register(): void {
     if (!$this->subscriberIds || !class_exists('\Civi')) {
@@ -72,17 +79,33 @@ class EventSubscriberRegistrar {
     }
 
     $dispatcher = \Civi::dispatcher();
-    if (!$dispatcher) {
+    if ($dispatcher) {
+      $this->attach($dispatcher);
+    }
+  }
+
+  /**
+   * Attaches this container's tagged subscribers to a dispatcher.
+   *
+   * Attaching again from the same container does nothing. Subscribers that
+   * another container attached, one Drupal has rebuilt since, are removed
+   * first: they hold that container's services, and with both attached each
+   * event would reach every subscriber twice.
+   *
+   * @param \Civi\Core\CiviEventDispatcherInterface $dispatcher
+   *   CiviCRM's dispatcher.
+   */
+  public function attach(CiviEventDispatcherInterface $dispatcher): void {
+    self::$dispatchers ??= new \WeakMap();
+    $attached = self::$dispatchers[$dispatcher] ?? NULL;
+    if ($attached && $attached['container'] === $this->container) {
       return;
     }
-
-    // Guard against multiple hook_civicrm_config invocations in one process.
-    $key = spl_object_id($dispatcher);
-    if (isset($this->registered[$key])) {
-      return;
+    foreach ($attached['subscribers'] ?? [] as $subscriber) {
+      $dispatcher->removeSubscriber($subscriber);
     }
-    $this->registered[$key] = TRUE;
 
+    $subscribers = [];
     foreach ($this->subscriberIds as $id) {
       try {
         $subscriber = $this->container->get($id);
@@ -98,8 +121,13 @@ class EventSubscriberRegistrar {
 
       if ($subscriber instanceof EventSubscriberInterface) {
         $dispatcher->addSubscriber($subscriber);
+        $subscribers[] = $subscriber;
       }
     }
+    self::$dispatchers[$dispatcher] = [
+      'container' => $this->container,
+      'subscribers' => $subscribers,
+    ];
   }
 
 }
