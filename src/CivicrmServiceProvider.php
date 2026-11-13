@@ -13,6 +13,7 @@ use Drupal\Core\DependencyInjection\ServiceProviderBase;
  * tagged "civicrm.event_subscriber" and hands their IDs to the registrar, which
  * attaches them to \Civi::dispatcher() once CiviCRM has booted.
  *
+ * @see \Drupal\civicrm\CivicrmEventSubscriberInterface
  * @see \Drupal\civicrm\EventSubscriberRegistrar
  * @see civicrm_civicrm_config()
  */
@@ -21,7 +22,15 @@ class CivicrmServiceProvider extends ServiceProviderBase {
   /**
    * {@inheritdoc}
    */
-  public function alter(ContainerBuilder $container) {
+  public function register(ContainerBuilder $container): void {
+    $container->registerForAutoconfiguration(CivicrmEventSubscriberInterface::class)
+      ->addTag('civicrm.event_subscriber');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function alter(ContainerBuilder $container): void {
     if (!$container->hasDefinition('civicrm.event_subscriber_registrar')) {
       return;
     }
