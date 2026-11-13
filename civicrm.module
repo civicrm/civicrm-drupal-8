@@ -362,6 +362,15 @@ function civicrm_user_login(AccountInterface $account) {
  */
 function civicrm_user_insert(AccountInterface $account) {
   $civicrm = \Drupal::service('civicrm');
+  // A user saved before civicrm_install() has run, as user_install() saves
+  // the anonymous and administrator accounts when civicrm is installed in the
+  // same group, has no CiviCRM to be synchronized with yet. Logging in
+  // synchronizes the account later, as it does for any user that existed
+  // before CiviCRM was installed.
+  // @see \Drupal\civicrm\Civicrm::hasSettingsFile()
+  if (!$civicrm->hasSettingsFile()) {
+    return;
+  }
   $civicrm->initialize();
   civicrm_key_disable();
   $userSystem = CRM_Core_Config::singleton()->userSystem;
@@ -396,7 +405,12 @@ function civicrm_user_insert(AccountInterface $account) {
  * Implements hook_user_update().
  */
 function civicrm_user_update(AccountInterface $account) {
-  \Drupal::service('civicrm')->initialize();
+  $civicrm = \Drupal::service('civicrm');
+  // @see civicrm_user_insert()
+  if (!$civicrm->hasSettingsFile()) {
+    return;
+  }
+  $civicrm->initialize();
 
   // Update primary email address of contact if it has changed.
   $contact_id = \CRM_Core_BAO_UFMatch::getContactId($account->id());
@@ -415,7 +429,12 @@ function civicrm_user_update(AccountInterface $account) {
  * Implements hook_user_delete().
  */
 function civicrm_user_delete(AccountInterface $account) {
-  \Drupal::service('civicrm')->initialize();
+  $civicrm = \Drupal::service('civicrm');
+  // @see civicrm_user_insert()
+  if (!$civicrm->hasSettingsFile()) {
+    return;
+  }
+  $civicrm->initialize();
   \CRM_Core_BAO_UFMatch::deleteUser($account->id());
 }
 

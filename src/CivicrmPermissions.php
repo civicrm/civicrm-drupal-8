@@ -15,9 +15,13 @@ class CivicrmPermissions implements ContainerInjectionInterface {
 
   /**
    * Class constructor.
+   *
+   * @param \Drupal\civicrm\Civicrm $civicrm
+   *   The CiviCRM service.
    */
-  public function __construct(Civicrm $civicrm) {
-    $civicrm->initialize();
+  public function __construct(
+    protected Civicrm $civicrm,
+  ) {
   }
 
   /**
@@ -36,6 +40,15 @@ class CivicrmPermissions implements ContainerInjectionInterface {
    *   An array of all permissions, keyed by the machine name.
    */
   public function permissions() {
+    // Drupal collects every module's permissions whenever a role is saved,
+    // including the roles of modules installed in one group with civicrm.
+    // There is no CiviCRM permission before civicrm_install() has run.
+    // @see \Drupal\civicrm\Civicrm::hasSettingsFile()
+    if (!$this->civicrm->hasSettingsFile()) {
+      return [];
+    }
+    $this->civicrm->initialize();
+
     $permissions = [];
     foreach (\CRM_Core_Permission::basicPermissions(FALSE, TRUE) as $permission => $attr) {
       $permissions[$permission] = ['title' => $attr['label']];

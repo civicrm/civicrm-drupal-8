@@ -36,7 +36,7 @@ class Civicrm {
       ['!1' => $docLinkInstall, '!2' => $docLinkTrouble, '!3' => $forumLink]
     );
 
-    $settingsFile = \Drupal::service('kernel')->getSitePath() . '/civicrm.settings.php';
+    $settingsFile = $this->getSettingsFile();
     if (!defined('CIVICRM_SETTINGS_PATH')) {
       define('CIVICRM_SETTINGS_PATH', $settingsFile);
     }
@@ -68,6 +68,36 @@ class Civicrm {
    */
   public function isInitialized() {
     return static::$initialized;
+  }
+
+  /**
+   * Checks whether CiviCRM's settings file is in place.
+   *
+   * CiviCRM cannot be initialized without it, and civicrm_install() writes it.
+   * Drupal installs a site's modules in groups, and on Drupal 12 a test's
+   * modules share a group with user: their roles and users are saved before
+   * civicrm_install() runs. Code reached from those saves, such as the
+   * permission callback and the user hooks, finds no CiviCRM to ask yet.
+   *
+   * A settings file written before the module is installed passes this check
+   * while CiviCRM's database is still empty; initialize() fails then as it
+   * did before.
+   *
+   * @return bool
+   *   TRUE if CiviCRM is initialized or its settings file exists.
+   */
+  public function hasSettingsFile(): bool {
+    return $this->isInitialized() || stream_resolve_include_path($this->getSettingsFile()) !== FALSE;
+  }
+
+  /**
+   * Returns the path of the settings file, as initialize() includes it.
+   *
+   * @return string
+   *   The path, relative to the Drupal root.
+   */
+  protected function getSettingsFile(): string {
+    return \Drupal::service('kernel')->getSitePath() . '/civicrm.settings.php';
   }
 
   /**
