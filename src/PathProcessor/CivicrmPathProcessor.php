@@ -3,13 +3,15 @@
 namespace Drupal\civicrm\PathProcessor;
 
 use Drupal\Core\PathProcessor\InboundPathProcessorInterface;
+use Drupal\Core\PathProcessor\OutboundPathProcessorInterface;
+use Drupal\Core\Render\BubbleableMetadata;
 use Symfony\Component\HttpFoundation\Request;
 use Drupal\civicrm\Civicrm;
 
 /**
  * A path processor to ensure we're using the correct routes in CiviCRM.
  */
-class CivicrmPathProcessor implements InboundPathProcessorInterface {
+class CivicrmPathProcessor implements InboundPathProcessorInterface, OutboundPathProcessorInterface {
 
   /**
    * If it's not a civi path, just return it as-is.
@@ -63,6 +65,26 @@ class CivicrmPathProcessor implements InboundPathProcessorInterface {
         }
       }
       return \Civi::$statics[__CLASS__]['knownPaths'][$path];
+    }
+    return $path;
+  }
+
+  /**
+   * Turns the ':' in the extra path parts back into '/'.
+   *
+   * processInbound() stores civicrm/ajax/api4/Contact/autocomplete as
+   * civicrm/ajax/api4/Contact:autocomplete. Without the reverse step a URL
+   * generated from that route is civicrm/ajax/api4/Contact%3Aautocomplete,
+   * which differs from the requested path, so the route normalizer of the
+   * redirect module answers every GET to such a path with a 301.
+   */
+  public function processOutbound($path, &$options = [], ?Request $request = NULL, ?BubbleableMetadata $bubbleable_metadata = NULL) {
+    $route = $options['route'] ?? NULL;
+    if ($route && $route->getDefault('_controller') === 'Drupal\civicrm\Controller\CivicrmController::main') {
+      $prefix = '/' . $route->getDefault('args') . '/';
+      if (str_starts_with($path, $prefix)) {
+        $path = $prefix . str_replace(':', '/', substr($path, strlen($prefix)));
+      }
     }
     return $path;
   }
